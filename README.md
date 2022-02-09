@@ -2,6 +2,5 @@
 
 ## GUI that makes Transmittance, Reflectance, Absorption plots
 
-![This is a GUI](/images/GUI.png) 
-
-![This is a plot](/images/transmittance_plot.png#gh-light-mode-only)
+<img src = "/images/GUI.png" width ="450" />  <img src = "/images/transmittance_plot.png" width ="400" />
+ 
