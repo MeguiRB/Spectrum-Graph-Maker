@@ -16,15 +16,17 @@ from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
 from Functions import filter_files, get_plot_values, AxesGraph, write_text
 from Plot_Legend_Functions import place_legend, framing, show_legend_edit
+
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
-
 
 # Building Window
 layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, tooltip='tip'), sg.Tab('Legend', tab2_layout)]], tooltip='TIP2')],
           [sg.T("File Name:"), sg.Input(key="-Save-", size=(30, 4), change_submits=True), sg.Button("Save")]]
 
-window = sg.Window('My Graph Maker', layout, size=(680, 450), resizable=True)  # size=(horizontal,vertical)
+window = sg.Window('My Graph Maker', layout, size=(680, 450), resizable=True, finalize=True)
+window['Position 1'].bind('<ButtonRelease-1>', 'CHANGE')
+window['Position 2'].bind('<ButtonRelease-1>', 'CHANGE')
 
 while True:
     event, values = window.read()
@@ -86,19 +88,19 @@ while True:
 
     elif event == "-ChLeg-":  # Change legend
 
-        for numberleg in range(1, len(line_1) + 1):
+        for leg_number in range(1, len(line_1) + 1):
 
-            numberleg_key = str(numberleg)
-            textleg = values[numberleg_key]
-            width = values["W" + numberleg_key]
-            Type = values["S" + numberleg_key]
-            color_chosen = values["C" + numberleg_key]
+            leg_number_key = str(leg_number)
+            leg_text = values[leg_number_key]
+            width = values["W" + leg_number_key]
+            Type = values["S" + leg_number_key]
+            color_chosen = values["C" + leg_number_key]
 
-            position = numberleg - 1
-            if textleg:
-                textleg = write_text(textleg)
-                line_1[position].set_label(textleg)
-                line_2[position].set_label(textleg)
+            position = leg_number - 1
+            if leg_text:
+                leg_text = write_text(leg_text)
+                line_1[position].set_label(leg_text)
+                line_2[position].set_label(leg_text)
 
             line_1[position].set_linewidth(width)
             line_1[position].set_linestyle(Type)
@@ -119,6 +121,17 @@ while True:
         plt.show()
 
         plt.show()
+
+    elif event == "Position 1" + "CHANGE":
+        window["-leg-"].update(disabled=False)
+        window['_SPINX_'].update(disabled=True)
+        window['_SPINY_'].update(disabled=True)
+
+
+    elif event == "Position 2" + "CHANGE":
+        window["-leg-"].update(disabled=True)
+        window['_SPINX_'].update(disabled=False)
+        window['_SPINY_'].update(disabled=False)
 
 
     elif event == "Update":

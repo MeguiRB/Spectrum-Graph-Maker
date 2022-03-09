@@ -1,9 +1,9 @@
 def place_legend(values):
-    legend_position = values["-leg-"]
-
-    if values["-in_out-"] == "Position 1":
+    if values["Position 1"]:
+        legend_position = values["-leg-"]
         box = None
     else:
+        legend_position = "lower left"
         x = values["_SPINX_"]
         y = values["_SPINY_"]
         box = (x, y)
@@ -25,6 +25,7 @@ def show_legend_edit(window, line_1):
     keys_2 = ["LegT", "LW", "LS", "LC", "space_c", "-ChLeg-"]
     for key in keys_2:
         window[key].update(visible=True)
+
 
 def framing(values):
     if values["-frame-"] == "yes":

@@ -25,9 +25,9 @@ for z in range(1, 11):
                         sg.pin(sg.Combo(color_list, default_value=color_list[z - 1], key=f"C{z}", size=size_color_box,
                                         visible=False))])
 
-i = -2
+i = -3
 list_position = []
-while i <= 2:
+while i <= 3:
     list_position.append(i)
     i = round(i + 0.01, 2)
 
@@ -38,12 +38,11 @@ column_1 = [[sg.T("Columns:"), sg.Input('1', key="-columns-", size=box_size), sg
              sg.Combo(['yes', 'no'], default_value="no", key="-frame-"), sg.T("    Text size:"),
              sg.Input('13', key="-Tsize-", size=box_size)],
             [sg.T("")],
-            [sg.T("  Choice: "),
-             sg.Combo(['Position 1', 'Position 2'], default_value="Position 1", key="-in_out-", size=(10, 1)),
-             sg.T("    Position 1:"), sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],
-            [sg.T("                                              Position 2:"), sg.T("↔"),
-             sg.Spin(list_position, initial_value=1.00, key='_SPINX_', size=(4, 4)), sg.T("↕"),
-             sg.Spin(list_position, initial_value=1.02, key='_SPINY_', size=(4, 4))]
+            [sg.Radio("Position Mode 1", "RADIO_P", default=True, key="Position 1"),
+             sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],
+            [sg.Radio("Position Mode 2", "RADIO_P", key="Position 2"), sg.T("↔"),
+             sg.Spin(list_position, initial_value=0.65, key='_SPINX_', size=box_size, disabled=True), sg.T("↕"),
+             sg.Spin(list_position, initial_value=0.65, key='_SPINY_', size=box_size, disabled=True)]
             ]
 
 column_2 = [[sg.T(" "), sg.Button("  Update \n Legend", key="Update", size=(9, 5))]]
