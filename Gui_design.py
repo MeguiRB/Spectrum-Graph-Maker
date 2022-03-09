@@ -1,7 +1,6 @@
 import PySimpleGUI as sg
 from Colors import color_dictionary
 
-
 cola = [[sg.Text('Files', font=("bold", 11))],
         [sg.Listbox(values=[], select_mode='extended', key='-list-', size=(30, 10))]
         ]
@@ -66,31 +65,28 @@ tab1_layout = [[sg.Text('Graph Maker', font=(25))],
                [sg.T("")]
                ]
 
-color_list = []
-color_list_code = []
-for key in color_dictionary:
-    color_list.append(key)
-
+color_list = list(color_dictionary.keys())
 style_types = ['solid', 'dashed', 'dashdot', 'dotted']
 
-scolor = (9, 7)
+size_color_box = (9, 7)
 tab2_layout = [[sg.Text('Legend Editor', font=(25))],
                [sg.pin(sg.Text('                                             Text', key="LegT", visible=False)),
                 sg.pin(sg.Text("                            Linewidth", key="LW", visible=False)),
                 sg.pin(sg.Text("     Linestyle", key="LS", visible=False)),
                 sg.pin(sg.Text("          Linecolor", key="LC", visible=False))]]
 
-for z in range(1,11):
+for z in range(1, 11):
     tab2_layout.append([sg.pin(sg.Text(f"Legend {z:02}:  ", key=f"L{z}", visible=False)),
-      sg.pin(sg.Input(key=f"{z}", size=(32, 4), visible=False)),
-      sg.pin(sg.T("   ", key=f"space_a{z}", visible=False)),
-      sg.pin(sg.Input("0.9", key=f"W{z}", size=(4, 4), visible=False)),
-      sg.pin(sg.T("   ", key=f"space_b{z}", visible=False)),
-      sg.pin(sg.Combo(style_types, default_value="solid", key=f"S{z}", size=(7, 4), visible=False)),
-      sg.pin(sg.T("   ", key=f"space_d{z}", visible=False)),
-      sg.pin(sg.Combo(color_list, default_value=color_list[z-1], key=f"C{z}", size=scolor, visible=False))])
+                        sg.pin(sg.Input(key=f"{z}", size=(32, 4), visible=False)),
+                        sg.pin(sg.T("   ", key=f"space_a{z}", visible=False)),
+                        sg.pin(sg.Input("0.9", key=f"W{z}", size=(4, 4), visible=False)),
+                        sg.pin(sg.T("   ", key=f"space_b{z}", visible=False)),
+                        sg.pin(sg.Combo(style_types, default_value="solid", key=f"S{z}", size=(7, 4), visible=False)),
+                        sg.pin(sg.T("   ", key=f"space_d{z}", visible=False)),
+                        sg.pin(sg.Combo(color_list, default_value=color_list[z - 1], key=f"C{z}", size=size_color_box,
+                                        visible=False))])
 
 tab2_layout.extend([[sg.pin(sg.T("               ", key="space_c", visible=False)),
-      sg.pin(sg.Button("Change legend", key="-ChLeg-", visible=False))],
-     [sg.HorizontalSeparator(key="Separate2")],
-     [sg.Column(col1), sg.Column(col2)]])
+                     sg.pin(sg.Button("Change legend", key="-ChLeg-", visible=False))],
+                    [sg.HorizontalSeparator(key="Separate2")],
+                    [sg.Column(col1), sg.Column(col2)]])

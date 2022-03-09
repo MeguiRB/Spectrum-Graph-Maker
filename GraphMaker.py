@@ -5,70 +5,69 @@ Created on Tue Sep 14 19:36:38 2021
 @author: Margarida Barbosa
 """
 
-import PySimpleGUI as sg  # criar a GUI
-import pandas as pd  # Tratar os dados
-import matplotlib  # fazer os gráficos
-matplotlib.use('TkAgg')  # janela dos gráficos
-matplotlib.rcParams['mathtext.default'] = 'regular'  # formatar o texto
+import PySimpleGUI as sg  # create GUI
+import pandas as pd  # data treatment
+import matplotlib  # make plot
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 import os
-import ctypes  # usado para as mensagens de erro
+import ctypes  # for error message
 from typing import List
-import pickle as pkl  # para poder guardar e editar posteriormente os gráficos
-import natsort  # sort list
+import pickle as pkl  # to edit the plots if needed
+import natsort  # sort list 
 from Colors import color_dictionary
 from Gui_design import tab1_layout, tab2_layout
 
+matplotlib.use('TkAgg')  # plot window
+matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
 
-def Importar(pathDir, file):
-    pathFile = os.sep.join([pathDir, file])
-    df = pd.read_csv(pathFile)
 
-    Col1 = df.columns[0]  # nome da coluna 1
-    Col2 = df.columns[1]  # nome da coluna 2
+def import_data(dir_path, file):
+    path_file = os.sep.join([dir_path, file])
+    df = pd.read_csv(path_file)
 
-    # strings que nao interessam ficam NaN, tornando o resto em formato numerico
-    df[Col1] = pd.to_numeric(df[Col1], errors='coerce')
+    x_column_label = df.columns[0]
+    y_column_label = df.columns[1]
 
-    # importante formato numerico para o grafico
-    df[Col2] = pd.to_numeric(df[Col2], errors='coerce')
+    # Non-numeric values turn to NaN, while the rest turn into numeric values
+    df[x_column_label] = pd.to_numeric(df[x_column_label], errors='coerce')
+    df[y_column_label] = pd.to_numeric(df[y_column_label], errors='coerce')
 
-    # retira linhas com NaN
+    # remove lines with NaN
     df = df.dropna()
 
-    # x= df[Col1].to_numpy()
-    # y= df[Col2].to_numpy()
-    return ([df[Col1], df[Col2]])
+    return [df[x_column_label], df[y_column_label]]
 
 
-def ChoosingValues():
+def filter_files():
     path_dir: str = values["-IN2-"]
 
     content_dir: List[str] = os.listdir(path_dir)
-    content_dir = natsort.natsorted(content_dir)  # considers 2 before 10
+    content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
 
+    dic_properties = {"-Trans-": "Transmittance (%)", "-Refl-": "Reflectance (%)", "-Absorp-": "Absorption (%)",
+                      "-Absorb-": "Absorbance"}
     if values["-Trans-"]:
         if values["-Total-"]:
-            TRA = "TT"
+            optical_property = "TT"
         elif values["-Spec-"]:
-            TRA = "TE"
-        yNome = "Transmittance (%)"
+            optical_property = "TE"
+        y_label = "Transmittance (%)"
 
     elif values["-Refl-"]:
         if values["-Total-"]:
-            TRA = "R"
+            optical_property = "R"
         elif values["-Dif-"]:
-            TRA = "RD"
-        yNome = "Reflectance (%)"
+            optical_property = "RD"
+        y_label = "Reflectance (%)"
 
     elif values["-Absorp-"]:
-        yNome = "Absorption (%)"
-        TRA = "-----"
+        y_label = "Absorption (%)"
+        optical_property = "-----"
 
     elif values["-Absorb-"]:
-        yNome = "Absorbance"
-        TRA = "Abs"
+        y_label = "Absorbance"
+        optical_property = "Abs"
 
     # window['_EXIT_'].Update(visible = True)
 
@@ -76,7 +75,7 @@ def ChoosingValues():
     files = []
     for fileName in content_dir:
         if fileName.find("csv") != -1:
-            if fileName.find(TRA) != -1:
+            if fileName.find(optical_property) != -1:
                 number += 1
                 files.append(fileName.replace('.csv', ''))
 
@@ -86,7 +85,7 @@ def ChoosingValues():
                     files.append(fileName.replace('.csv', ''))
 
     window["-list-"].Update(files)
-    return ([path_dir, TRA, yNome, files])
+    return ([path_dir, optical_property, y_label, files])
 
 
 def ValuesForGraph(path_dir, TRA, yNome, files):
@@ -121,22 +120,22 @@ def ValuesForGraph(path_dir, TRA, yNome, files):
 
             if values["-Absorp-"] == False:
 
-                [Val1, Val2] = Importar(path_dir, fileName)
+                [Val1, Val2] = import_data(path_dir, fileName)
 
-                Valores = pd.DataFrame(Val2)
-                Coluna = Valores.columns[0]
+                Abs_dataframe = pd.DataFrame(Val2)
+                abs_column_label = Abs_dataframe.columns[0]
 
-                legendName = fileName.replace('.csv', '')
-                legendName = legendName.replace(" " + TRA, '')
-                legendName = legendName.replace(" ", '/')
-                legendName = writeL(legendName)
+                legend_name = fileName.replace('.csv', '')
+                legend_name = legend_name.replace(" " + TRA, '')
+                legend_name = legend_name.replace(" ", '/')
+                legend_name = writeL(legend_name)
 
                 line_1.append("")
                 line_2.append("")
                 color_chosen = values["C" + str(nlines + 1)]
-                line_1[nlines], = ax1.plot(Val1, Valores[Coluna], label=legendName, linewidth=0.9,
+                line_1[nlines], = ax1.plot(Val1, Abs_dataframe[abs_column_label], label=legend_name, linewidth=0.9,
                                            color=color_dictionary[color_chosen])
-                line_2[nlines], = ax2.plot(Val1, Valores[Coluna], label=legendName, linewidth=0.9,
+                line_2[nlines], = ax2.plot(Val1, Abs_dataframe[abs_column_label], label=legend_name, linewidth=0.9,
                                            color=color_dictionary[color_chosen])
                 nlines += 1
 
@@ -178,30 +177,30 @@ def ValuesForGraph(path_dir, TRA, yNome, files):
                     print(fileName_import)
                     print(fileName_import2)
 
-                    [Vala, Valb] = Importar(path_dir, fileName_import)
-                    [Val1, Val2] = Importar(path_dir, fileName_import2)
+                    [Vala, Valb] = import_data(path_dir, fileName_import)
+                    [Val1, Val2] = import_data(path_dir, fileName_import2)
 
                     filesselected.remove(fileName_import2)
 
-                    Valores = pd.DataFrame(100 - Valb - Val2)
-                    Coluna = Valores.columns[0]
+                    Abs_dataframe = pd.DataFrame(100 - Valb - Val2)
+                    abs_column_label = Abs_dataframe.columns[0]
 
-                    legendName = fileName
-                    # legendName=legendName.replace(" ",'/')
-                    legendName = writeL(legendName)
+                    legend_name = fileName
+                    # legend_name=legend_name.replace(" ",'/')
+                    legend_name = writeL(legend_name)
 
-                    # last_char_index = legendName.rfind("/")        
-                    # legendName =  legendName[:last_char_index]
+                    # last_char_index = legend_name.rfind("/")        
+                    # legend_name =  legend_name[:last_char_index]
                     line_1.append("")
                     line_2.append("")
                     color_chosen = values["C" + str(nlines + 1)]
-                    line_1[nlines], = ax1.plot(Val1, Valores[Coluna], label=legendName, linewidth=0.9,
+                    line_1[nlines], = ax1.plot(Val1, Abs_dataframe[abs_column_label], label=legend_name, linewidth=0.9,
                                                color=color_dictionary[color_chosen])
-                    line_2[nlines], = ax2.plot(Val1, Valores[Coluna], label=legendName, linewidth=0.9,
+                    line_2[nlines], = ax2.plot(Val1, Abs_dataframe[abs_column_label], label=legend_name, linewidth=0.9,
                                                color=color_dictionary[color_chosen])
                     nlines += 1
 
-        print(f"Maximo de {legendName}: {Valores[Coluna].max()}")
+        print(f"Maximo de {legend_name}: {Abs_dataframe[abs_column_label].max()}")
 
     fsize = 17
     ax1.set_xlabel('Wavelength (nm)', fontsize=fsize)
@@ -329,7 +328,7 @@ while True:
         if not path_dir:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the paste!", u"Error", 0)
         else:
-            [path_dir, TRA, yNome, files] = ChoosingValues()
+            [path_dir, TRA, yNome, files] = filter_files()
             print(values["-IN-"])
 
     elif event == "MakeGraph":
