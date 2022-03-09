@@ -8,7 +8,6 @@ Created on Tue Sep 14 19:36:38 2021
 import PySimpleGUI as sg  # criar a GUI
 import pandas as pd  # Tratar os dados
 import matplotlib  # fazer os gráficos
-
 matplotlib.use('TkAgg')  # janela dos gráficos
 matplotlib.rcParams['mathtext.default'] = 'regular'  # formatar o texto
 import matplotlib.pyplot as plt
@@ -17,15 +16,9 @@ import os
 import ctypes  # usado para as mensagens de erro
 from typing import List
 import pickle as pkl  # para poder guardar e editar posteriormente os gráficos
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import natsort  # sort list
-
-# import numpy as np
-
-
-# from cycler import cycler
-# matplotlib.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
 from Colors import color_dictionary
+from Gui_design import tab1_layout, tab2_layout
 
 
 def Importar(pathDir, file):
@@ -315,172 +308,9 @@ def MakeLegVisible():
     window["-ChLeg-"].update(visible=True)
 
 
-
-
 #######################################################################################################################
 
-cola = [[sg.Text('Files', font=("bold", 11))],
-        [sg.Listbox(values=[], select_mode='extended', key='-list-', size=(30, 10))]
-        ]
 
-sz = (4, 4)
-
-colb_1 = [[sg.Text('Axis:', font=("bold", 11))]]
-colb_2 = [
-    [sg.Text('x min:'), sg.Input('0', key="-xmin-", size=sz), sg.Text('x max:'), sg.Input('', key="-xmax-", size=sz)],
-    [sg.Text('y min:'), sg.Input('0', key="-ymin-", size=sz), sg.Text('y max:'), sg.Input('100', key="-ymax-", size=sz)]
-    ]
-colb_3 = [[sg.Button("Set Axis")]]
-
-colb = [[sg.T("")],
-        [sg.Button("MakeGraph")],
-        [sg.T("")],
-        [sg.Text("Title:", font=("bold", 11)), sg.Input(key="-title-", size=(38, 4)), sg.Button("Set Title")],
-        [sg.T("")],
-        [sg.Column(colb_1), sg.Column(colb_2), sg.Column(colb_3)],
-        ]
-################
-
-
-i = -2
-list_position = []
-while i <= 2:
-    list_position.append(i)
-    i = round(i + 0.01, 2)
-
-positions_choices = ['best', 'upper left', 'upper center', 'upper right', 'center left', 'center', 'center right',
-                     'lower left', 'lower center', 'lower right']
-
-col1 = [[sg.T("Columns:"), sg.Input('1', key="-columns-", size=sz), sg.T("    Frame:"),
-         sg.Combo(['yes', 'no'], default_value="no", key="-frame-"), sg.T("    Text size:"),
-         sg.Input('13', key="-Tsize-", size=sz)],
-        [sg.T("")],
-        [sg.T("  Choice: "),
-         sg.Combo(['Position 1', 'Position 2'], default_value="Position 1", key="-in_out-", size=(10, 1)),
-         sg.T("    Position 1:"), sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],
-        [sg.T("                                              Position 2:"), sg.T("↔"),
-         sg.Spin(list_position, initial_value=1.00, key='_SPINX_', size=(4, 4)), sg.T("↕"),
-         sg.Spin(list_position, initial_value=1.02, key='_SPINY_', size=(4, 4))]
-        ]
-
-col2 = [[sg.T(" "), sg.Button("  Update \n Legend", key="Update", size=(9, 5))]]
-
-sg.theme("DarkTeal2")
-tab1_layout = [[sg.Text('Graph Maker', font=(25))],
-               [sg.Text("Choose a folder: "), sg.Input(key="-IN2-", size=(65, 4), change_submits=True),
-                sg.FolderBrowse(key="-IN-")],
-               [sg.HorizontalSeparator(key="Separate0")],
-               [sg.Text("Chose one: "), sg.Radio('Transmittance', "RADIO1", default=True, key="-Trans-"),
-                sg.Radio('Reflectance', "RADIO1", default=False, key="-Refl-"),
-                sg.Radio('Absorption', "RADIO1", default=False, key="-Absorp-"),
-                sg.Radio('Absorbance', "RADIO1", default=False, key="-Absorb-")],
-               [sg.Text("Chose one: "), sg.Radio('Total', "RADIO2", default=True, key="-Total-"),
-                sg.Radio('Specular', "RADIO2", default=False, key="-Spec-"),
-                sg.Radio('Difuse', "RADIO2", default=False, key="-Dif-"),
-                sg.T("                                                                "), sg.Button("Submit")],
-               [sg.HorizontalSeparator(key="Separate")],
-               [sg.Column(cola), sg.Column(colb)],
-               [sg.T("")]
-               ]
-
-color_list = []
-color_list_code = []
-for key in color_dictionary:
-    color_list.append(key)
-
-style_types = ['solid', 'dashed', 'dashdot', 'dotted']
-
-scolor = (9, 7)
-tab2_layout = [[sg.Text('Legend Editor', font=(25))],
-               [sg.pin(sg.Text('                                             Text', key="LegT", visible=False)),
-                sg.pin(sg.Text("                            Linewidth", key="LW", visible=False)),
-                sg.pin(sg.Text("     Linestyle", key="LS", visible=False)),
-                sg.pin(sg.Text("          Linecolor", key="LC", visible=False))],
-               [sg.pin(sg.Text("Legend 1:  ", key="L1", visible=False)),
-                sg.pin(sg.Input(key="1", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a1", visible=False)),
-                sg.pin(sg.Input("0.9", key="W1", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b1", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S1", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d1", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[0], key="C1", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 2:  ", key="L2", visible=False)),
-                sg.pin(sg.Input(key="2", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a2", visible=False)),
-                sg.pin(sg.Input("0.9", key="W2", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b2", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S2", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d2", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[1], key="C2", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 3:  ", key="L3", visible=False)),
-                sg.pin(sg.Input(key="3", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a3", visible=False)),
-                sg.pin(sg.Input("0.9", key="W3", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b3", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S3", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d3", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[2], key="C3", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 4:  ", key="L4", visible=False)),
-                sg.pin(sg.Input(key="4", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a4", visible=False)),
-                sg.pin(sg.Input("0.9", key="W4", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b4", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S4", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d4", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[3], key="C4", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 5:  ", key="L5", visible=False)),
-                sg.pin(sg.Input(key="5", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a5", visible=False)),
-                sg.pin(sg.Input("0.9", key="W5", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b5", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S5", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d5", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[4], key="C5", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 6:  ", key="L6", visible=False)),
-                sg.pin(sg.Input(key="6", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a6", visible=False)),
-                sg.pin(sg.Input("0.9", key="W6", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b6", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S6", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d6", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[5], key="C6", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 7:  ", key="L7", visible=False)),
-                sg.pin(sg.Input(key="7", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a7", visible=False)),
-                sg.pin(sg.Input("0.9", key="W7", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b7", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S7", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d7", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[6], key="C7", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 8:  ", key="L8", visible=False)),
-                sg.pin(sg.Input(key="8", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a8", visible=False)),
-                sg.pin(sg.Input("0.9", key="W8", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b8", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S8", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d8", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[7], key="C8", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 9:  ", key="L9", visible=False)),
-                sg.pin(sg.Input(key="9", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a9", visible=False)),
-                sg.pin(sg.Input("0.9", key="W9", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b9", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S9", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d9", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[8], key="C9", size=scolor, visible=False))],
-               [sg.pin(sg.Text("Legend 10:", key="L10", visible=False)),
-                sg.pin(sg.Input(key="10", size=(32, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_a10", visible=False)),
-                sg.pin(sg.Input("0.9", key="W10", size=(4, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_b10", visible=False)),
-                sg.pin(sg.Combo(style_types, default_value="solid", key="S10", size=(7, 4), visible=False)),
-                sg.pin(sg.T("   ", key="space_d10", visible=False)),
-                sg.pin(sg.Combo(color_list, default_value=color_list[9], key="C10", size=scolor, visible=False))],
-               [sg.pin(sg.T("               ", key="space_c", visible=False)),
-                sg.pin(sg.Button("Change legend", key="-ChLeg-", visible=False))],
-               [sg.HorizontalSeparator(key="Separate2")],
-               [sg.Column(col1), sg.Column(col2)]
-               ]
 ###Building Window
 layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, tooltip='tip'), sg.Tab('Legend', tab2_layout)]], tooltip='TIP2')],
           [sg.T("File Name:"), sg.Input(key="-Save-", size=(30, 4), change_submits=True), sg.Button("Save")]]
