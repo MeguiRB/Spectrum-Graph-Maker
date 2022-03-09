@@ -17,18 +17,13 @@ def show_legend_edit(window, line_1):
             vis = True
         else:
             vis = False
-        keynumber = str(leg)
-        window["L" + keynumber].update(visible=vis)
-        window[keynumber].update(visible=vis)
-        window["space_a" + keynumber].update(visible=vis)
-        window["W" + keynumber].update(visible=vis)
-        window["space_b" + keynumber].update(visible=vis)
-        window["S" + keynumber].update(visible=vis)
-        window["space_d" + keynumber].update(visible=vis)
-        window["C" + keynumber].update(visible=vis)
+        key_number = str(leg)
+        keys_1 = ["L", "", "space_a", "W", "space_b", "S", "space_d", "C"]
+        for key in keys_1:
+            window[key + key_number].update(visible=vis)
 
-    keys = ["LegT", "LW", "LS", "LC", "space_c", "-ChLeg-"]
-    for key in keys:
+    keys_2 = ["LegT", "LW", "LS", "LC", "space_c", "-ChLeg-"]
+    for key in keys_2:
         window[key].update(visible=True)
 
 
@@ -46,7 +41,7 @@ def make_legend(string):
         str_latex = '$' + string + '$'
 
     str_latex = str_latex.replace(" ", "\:")
-    return (str_latex)
+    return str_latex
 
 
 def framing(values):
@@ -54,4 +49,4 @@ def framing(values):
         legend_frame = True
     else:
         legend_frame = False
-    return (legend_frame)
+    return legend_frame
