@@ -11,19 +11,19 @@ def place_legend(values):
     return [legend_position, box]
 
 
-def show_legend_edit(window, line_1):
+def show_legend_edit(window, lines_plots):
     for leg in range(1, 11):
-        if leg < len(line_1) + 1:
+        if leg < len(lines_plots) + 1:
             vis = True
         else:
             vis = False
         key_number = str(leg)
-        keys_1 = ["L", "", "space_a", "W", "space_b", "S", "space_d", "C"]
-        for key in keys_1:
+        keys_a = ["L", "", "space_a", "W", "space_b", "S", "space_d", "C"]
+        for key in keys_a:
             window[key + key_number].update(visible=vis)
 
-    keys_2 = ["LegT", "LW", "LS", "LC", "space_c", "-ChLeg-"]
-    for key in keys_2:
+    keys_b = ["LegT", "LW", "LS", "LC", "space_c", "-ChLeg-"]
+    for key in keys_b:
         window[key].update(visible=True)
 
 

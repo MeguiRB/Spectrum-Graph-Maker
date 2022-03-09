@@ -45,31 +45,24 @@ while True:
 
     elif event == "MakeGraph":
 
-        if not plt.fignum_exists(1) or not plt.fignum_exists(2):
-            fig_handle, ax1 = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
+        if not plt.fignum_exists(1):
+            fig_handle, ax = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
             fig_handle.patch.set_alpha(0)
-
-            fig_handle2, ax2 = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
-            fig_handle2.patch.set_alpha(0)
         else:
-            ax1.cla()
-            ax2.cla()
+            ax.cla()
 
-        [line_1, line_2, visible_light] = get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2)
-        show_legend_edit(window, line_1)
+        [lines_plots, visible_light] = get_plot_values(path_dir, TRA, yNome, files, values, ax)
+        show_legend_edit(window, lines_plots)
         [legend_position, box] = place_legend(values)
         number_columns = int(values['-columns-'])
         frameL = framing(values)
         size_legend_letter = values["-Tsize-"]
 
-        leg1 = ax1.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
-        leg2 = ax2.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
+        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
+                                    prop={'size': size_legend_letter}, frameon=frameL,
+                                    framealpha=1, borderpad=0.5)
 
-        frameC = leg2.get_frame()
+        frameC = legend_variable.get_frame()
         frameC.set_edgecolor('black')
 
         plt.show()
@@ -79,16 +72,14 @@ while True:
         [xmin, xmax, ymin, ymax] = AxesGraph(values)
 
         if values['-xmax-']:
-            ax1.set_xlim(xmin, xmax)
-            ax2.set_xlim(xmin, xmax)
-        ax1.set_ylim(ymin, ymax)
-        ax2.set_ylim(ymin, ymax)
+            ax.set_xlim(xmin, xmax)
+        ax.set_ylim(ymin, ymax)
         plt.show()
 
 
     elif event == "-ChLeg-":  # Change legend
 
-        for leg_number in range(1, len(line_1) + 1):
+        for leg_number in range(1, len(lines_plots) + 1):
 
             leg_number_key = str(leg_number)
             leg_text = values[leg_number_key]
@@ -99,24 +90,17 @@ while True:
             position = leg_number - 1
             if leg_text:
                 leg_text = write_text(leg_text)
-                line_1[position].set_label(leg_text)
-                line_2[position].set_label(leg_text)
+                lines_plots[position].set_label(leg_text)
 
-            line_1[position].set_linewidth(width)
-            line_1[position].set_linestyle(Type)
-            line_1[position].set_color(color_dictionary[color_chosen])
-            line_2[position].set_linewidth(width)
-            line_2[position].set_linestyle(Type)
-            line_2[position].set_color(color_dictionary[color_chosen])
+            lines_plots[position].set_linewidth(width)
+            lines_plots[position].set_linestyle(Type)
+            lines_plots[position].set_color(color_dictionary[color_chosen])
 
         # call legend to show update
-        leg1 = ax1.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
-        leg2 = ax2.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
-        frameC = leg2.get_frame()
+        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
+                                    prop={'size': size_legend_letter}, frameon=frameL,
+                                    framealpha=1, borderpad=0.5)
+        frameC = legend_variable.get_frame()
         frameC.set_edgecolor('black')
         plt.show()
 
@@ -141,13 +125,10 @@ while True:
         [legend_position, box] = place_legend(values)
         number_columns = int(values['-columns-'])
 
-        leg1 = ax1.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
-        leg2 = ax2.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                          prop={'size': size_legend_letter}, frameon=frameL,
-                          framealpha=1, borderpad=0.5)
-        frameC = leg2.get_frame()
+        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
+                                    prop={'size': size_legend_letter}, frameon=frameL,
+                                    framealpha=1, borderpad=0.5)
+        frameC = legend_variable.get_frame()
         frameC.set_edgecolor('black')
         plt.show()
 
@@ -156,11 +137,7 @@ while True:
 
         title_chosen = values["-title-"]
         title_chosen = write_text(title_chosen)
-
-        font_size = 17
-        ax1.set_title(title_chosen, fontsize=font_size)
-        ax2.set_title(title_chosen, fontsize=font_size)
-
+        ax.set_title(title_chosen, fontsize=17)
         plt.show()
 
     elif event == "Save":
@@ -177,12 +154,7 @@ while True:
         parameters = [legend_position, box, number_columns, size_legend_letter, frameL]
         NomeImage = values["-Save-"]
 
-        NomeImage_1 = dirName_images + '/' + NomeImage + '.png'
-        NomeImage_2 = dirName_pickle + '/' + NomeImage + '.pickle'
-        fig_handle.savefig(NomeImage_1, dpi=300, bbox_inches='tight')
-        pkl.dump((fig_handle, ax1, line_1, parameters), open(NomeImage_2, 'wb', pkl.HIGHEST_PROTOCOL))
-
-        NomeImage_a = dirName_images + '/' + 'vis_' + NomeImage + '.png'
-        NomeImage_b = dirName_pickle + '/' + 'vis_' + NomeImage + '.pickle'
-        fig_handle2.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
-        pkl.dump((fig_handle2, ax2, line_2, parameters, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+        NomeImage_a = dirName_images + '/' + NomeImage + '.png'
+        NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
+        fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
+        pkl.dump((fig_handle, ax, lines_plots, parameters, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))

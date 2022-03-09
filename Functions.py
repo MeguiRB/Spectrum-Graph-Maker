@@ -71,9 +71,9 @@ def filter_files(values, window):
     return [dir_path, optical_property, y_label, files]
 
 
-def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
+def get_plot_values(path_dir, TRA, yNome, files, values, ax):
     for wv_range, rgb in rainbow_rgb.items():
-        visible_light = ax2.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
+        visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
     files_selected_beta = values["-list-"]
     files_selected = []
@@ -82,8 +82,7 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
         files_selected.append(file_csv)
 
     # print(files_selected)
-    line_1 = []
-    line_2 = []
+    lines_plots = []
     nlines = 0
     for file_name in files_selected:
 
@@ -101,15 +100,11 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
                 legend_name = legend_name.replace(" ", '/')
                 legend_name = write_text(legend_name)
 
-                line_1.append("")
-                line_2.append("")
+                lines_plots.append("")
                 color_chosen = values["C" + str(nlines + 1)]
-                line_1[nlines], = ax1.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                           linewidth=0.9,
-                                           color=color_dictionary[color_chosen])
-                line_2[nlines], = ax2.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                           linewidth=0.9,
-                                           color=color_dictionary[color_chosen])
+                lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                          linewidth=0.9,
+                                          color=color_dictionary[color_chosen])
                 nlines += 1
 
             elif values["-Absorp-"]:
@@ -165,41 +160,28 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
 
                     # last_char_index = legend_name.rfind("/")
                     # legend_name =  legend_name[:last_char_index]
-                    line_1.append("")
-                    line_2.append("")
+
+                    lines_plots.append("")
                     color_chosen = values["C" + str(nlines + 1)]
-                    line_1[nlines], = ax1.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                               linewidth=0.9,
-                                               color=color_dictionary[color_chosen])
-                    line_2[nlines], = ax2.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                               linewidth=0.9,
-                                               color=color_dictionary[color_chosen])
+                    lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                              linewidth=0.9,
+                                              color=color_dictionary[color_chosen])
                     nlines += 1
 
     font_size = 17
-    ax1.set_xlabel('Wavelength (nm)', fontsize=font_size)
-    ax1.set_ylabel(yNome, fontsize=font_size)
-    ###
-    ax1.tick_params(axis="x", labelsize=font_size)
-    ax1.tick_params(axis="y", labelsize=font_size)
-    ax1.xaxis.set_minor_locator(AutoMinorLocator(2))
-    ax1.yaxis.set_minor_locator(AutoMinorLocator(2))
 
-    ax2.set_xlabel('Wavelength (nm)', fontsize=font_size)
-    ax2.set_ylabel(yNome, fontsize=font_size)
-
-    ##
-    ax2.tick_params(axis="x", labelsize=font_size)
-    ax2.tick_params(axis="y", labelsize=font_size)
-    ax2.xaxis.set_minor_locator(AutoMinorLocator(2))
-    ax2.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.set_xlabel('Wavelength (nm)', fontsize=font_size)
+    ax.set_ylabel(yNome, fontsize=font_size)
+    ax.tick_params(axis="x", labelsize=font_size)
+    ax.tick_params(axis="y", labelsize=font_size)
+    ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
 
     [xmin, xmax, ymin, ymax] = AxesGraph(values)
     if values['-ymax-']:
-        ax1.set_ylim(ymin, ymax)
-        ax2.set_ylim(ymin, ymax)
+        ax.set_ylim(ymin, ymax)
 
-    return ([line_1, line_2, visible_light])  # text labels
+    return [lines_plots, visible_light]  # text labels
 
 
 def AxesGraph(values):
