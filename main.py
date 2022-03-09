@@ -12,12 +12,13 @@ import os
 import ctypes  # for error message
 import pickle as pkl  # to edit the plots if needed
 from Colors import color_dictionary
-from Gui_design import tab1_layout, tab2_layout
-from Functions import filter_files, get_plot_values, AxesGraph
-from Plot_Legend_Functions import place_legend, framing, show_legend_edit, make_legend
-
+from GUI_Tab_1 import tab1_layout
+from GUI_Tab_2 import tab2_layout
+from Functions import filter_files, get_plot_values, AxesGraph, write_text
+from Plot_Legend_Functions import place_legend, framing, show_legend_edit
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
+
 
 # Building Window
 layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, tooltip='tip'), sg.Tab('Legend', tab2_layout)]], tooltip='TIP2')],
@@ -95,7 +96,7 @@ while True:
 
             position = numberleg - 1
             if textleg:
-                textleg = make_legend(textleg)
+                textleg = write_text(textleg)
                 line_1[position].set_label(textleg)
                 line_2[position].set_label(textleg)
 
@@ -141,7 +142,7 @@ while True:
     elif event == "Set Title":
 
         title_chosen = values["-title-"]
-        title_chosen = make_legend(title_chosen)
+        title_chosen = write_text(title_chosen)
 
         font_size = 17
         ax1.set_title(title_chosen, fontsize=font_size)

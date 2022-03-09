@@ -4,7 +4,6 @@ from matplotlib.ticker import AutoMinorLocator
 from typing import List
 import natsort  # sort list
 from Colors import color_dictionary
-from Plot_Legend_Functions import make_legend
 import os
 
 
@@ -100,7 +99,7 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
                 legend_name = file_name.replace('.csv', '')
                 legend_name = legend_name.replace(" " + TRA, '')
                 legend_name = legend_name.replace(" ", '/')
-                legend_name = make_legend(legend_name)
+                legend_name = write_text(legend_name)
 
                 line_1.append("")
                 line_2.append("")
@@ -162,7 +161,7 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
 
                     legend_name = file_name
                     # legend_name=legend_name.replace(" ",'/')
-                    legend_name = writeL(legend_name)
+                    legend_name = write_text(legend_name)
 
                     # last_char_index = legend_name.rfind("/")
                     # legend_name =  legend_name[:last_char_index]
@@ -212,3 +211,20 @@ def AxesGraph(values):
         xmax = values['-xmax-']
     ymax = float(values['-ymax-'])
     return [xmin, xmax, ymin, ymax]
+
+
+def write_text(string):
+    if 'n_line' in string:
+        text = string.split(" n_line ")
+        text1 = text[0]
+        str_latex = r'$' + text1 + ' $'
+
+        for i in range(1, len(text)):
+            textx = text[i]
+            str_latex += "\n" + r'$' + textx + ' $'
+
+    else:
+        str_latex = '$' + string + '$'
+
+    str_latex = str_latex.replace(" ", "\:")
+    return str_latex
