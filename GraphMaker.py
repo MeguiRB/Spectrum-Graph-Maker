@@ -17,6 +17,7 @@ import pickle as pkl  # to edit the plots if needed
 import natsort  # sort list 
 from Colors import color_dictionary
 from Gui_design import tab1_layout, tab2_layout
+from VisibleWavelength import rainbow_rgb
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -40,13 +41,11 @@ def import_data(dir_path, file):
 
 
 def filter_files():
-    path_dir: str = values["-IN2-"]
+    dir_path: str = values["-IN2-"]
 
-    content_dir: List[str] = os.listdir(path_dir)
+    content_dir: List[str] = os.listdir(dir_path)
     content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
 
-    dic_properties = {"-Trans-": "Transmittance (%)", "-Refl-": "Reflectance (%)", "-Absorp-": "Absorption (%)",
-                      "-Absorb-": "Absorbance"}
     if values["-Trans-"]:
         if values["-Total-"]:
             optical_property = "TT"
@@ -85,22 +84,11 @@ def filter_files():
                     files.append(fileName.replace('.csv', ''))
 
     window["-list-"].Update(files)
-    return ([path_dir, optical_property, y_label, files])
+    return [dir_path, optical_property, y_label, files]
 
 
 def ValuesForGraph(path_dir, TRA, yNome, files):
-    # sg.Radio('Transmittance', "RADIO1", default=False, key="-Trans-"),
-    # sg.Radio('Reflectance', "RADIO1", default=False,key="-Refl-"),
-    # sg.Radio('Absorption', "RADIO1", default=False,key="-Absorp"),
-    # sg.Radio('Absorbance', "RADIO1", default=False,key="-Absorb")],
-    # sg.Radio('Total', "RADIO2", default=False, key="-Total-"),
-    # sg.Radio('Specular', "RADIO2", default=False,key="-Spec-"),
-    # sg.Radio('Difuse', "RADIO2", default=False,key="-Dif-")],
 
-    rainbow_rgb = {(400, 440): '#8b00ff', (440, 460): '#4b0082',
-                   (460, 500): '#0000ff', (500, 570): '#00ff00',
-                   (570, 590): '#ffff00', (590, 620): '#ff7f00',
-                   (620, 750): '#ff0000'}
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax2.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
