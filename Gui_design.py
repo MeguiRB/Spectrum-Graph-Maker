@@ -12,8 +12,10 @@ column_a = [[sg.Text('Files', font=("bold", 11))],
 
 column_b1 = [[sg.Text('Axis:', font=("bold", 11))]]
 column_b2 = [
-    [sg.Text('x min:'), sg.Input('0', key="-xmin-", size=box_size), sg.Text('x max:'), sg.Input('', key="-xmax-", size=box_size)],
-    [sg.Text('y min:'), sg.Input('0', key="-ymin-", size=box_size), sg.Text('y max:'), sg.Input('100', key="-ymax-", size=box_size)]
+    [sg.Text('x min:'), sg.Input('0', key="-xmin-", size=box_size), sg.Text('x max:'),
+     sg.Input('', key="-xmax-", size=box_size)],
+    [sg.Text('y min:'), sg.Input('0', key="-ymin-", size=box_size), sg.Text('y max:'),
+     sg.Input('100', key="-ymax-", size=box_size)]
 ]
 column_b3 = [[sg.Button("Set Axis")]]
 
@@ -24,7 +26,6 @@ column_b = [[sg.T("")],
             [sg.T("")],
             [sg.Column(column_b1), sg.Column(column_b2), sg.Column(column_b3)],
             ]
-
 
 tab1_layout = [[sg.Text('Graph Maker', font=(25))],
                [sg.Text("Choose a folder: "), sg.Input(key="-IN2-", size=(65, 4), change_submits=True),
@@ -42,7 +43,6 @@ tab1_layout = [[sg.Text('Graph Maker', font=(25))],
                [sg.Column(column_a), sg.Column(column_b)],
                [sg.T("")]
                ]
-
 
 # Second Tab
 color_list = list(color_dictionary.keys())
@@ -66,7 +66,6 @@ for z in range(1, 11):
                         sg.pin(sg.Combo(color_list, default_value=color_list[z - 1], key=f"C{z}", size=size_color_box,
                                         visible=False))])
 
-
 i = -2
 list_position = []
 while i <= 2:
@@ -81,11 +80,11 @@ column_1 = [[sg.T("Columns:"), sg.Input('1', key="-columns-", size=box_size), sg
              sg.Input('13', key="-Tsize-", size=box_size)],
             [sg.T("")],
             [sg.T("  Choice: "),
-         sg.Combo(['Position 1', 'Position 2'], default_value="Position 1", key="-in_out-", size=(10, 1)),
-         sg.T("    Position 1:"), sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],
+             sg.Combo(['Position 1', 'Position 2'], default_value="Position 1", key="-in_out-", size=(10, 1)),
+             sg.T("    Position 1:"), sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],
             [sg.T("                                              Position 2:"), sg.T("↔"),
-         sg.Spin(list_position, initial_value=1.00, key='_SPINX_', size=(4, 4)), sg.T("↕"),
-         sg.Spin(list_position, initial_value=1.02, key='_SPINY_', size=(4, 4))]
+             sg.Spin(list_position, initial_value=1.00, key='_SPINX_', size=(4, 4)), sg.T("↕"),
+             sg.Spin(list_position, initial_value=1.02, key='_SPINY_', size=(4, 4))]
             ]
 
 column_2 = [[sg.T(" "), sg.Button("  Update \n Legend", key="Update", size=(9, 5))]]

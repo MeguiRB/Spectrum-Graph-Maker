@@ -1,0 +1,214 @@
+from VisibleWavelength import rainbow_rgb
+import pandas as pd  # data treatment
+from matplotlib.ticker import AutoMinorLocator
+from typing import List
+import natsort  # sort list
+from Colors import color_dictionary
+from Plot_Legend_Functions import make_legend
+import os
+
+
+def import_data(dir_path, file):
+    path_file = os.sep.join([dir_path, file])
+    df = pd.read_csv(path_file)
+
+    x_column_label = df.columns[0]
+    y_column_label = df.columns[1]
+
+    # Non-numeric values turn to NaN, while the rest turn into numeric values
+    df[x_column_label] = pd.to_numeric(df[x_column_label], errors='coerce')
+    df[y_column_label] = pd.to_numeric(df[y_column_label], errors='coerce')
+
+    # remove lines with NaN
+    df = df.dropna()
+
+    return [df[x_column_label], df[y_column_label]]
+
+
+def filter_files(values, window):
+    dir_path: str = values["-IN2-"]
+
+    content_dir: List[str] = os.listdir(dir_path)
+    content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
+
+    if values["-Trans-"]:
+        if values["-Total-"]:
+            optical_property = "TT"
+        elif values["-Spec-"]:
+            optical_property = "TE"
+        y_label = "Transmittance (%)"
+
+    elif values["-Refl-"]:
+        if values["-Total-"]:
+            optical_property = "R"
+        elif values["-Dif-"]:
+            optical_property = "RD"
+        y_label = "Reflectance (%)"
+
+    elif values["-Absorp-"]:
+        y_label = "Absorption (%)"
+        optical_property = "-----"
+
+    elif values["-Absorb-"]:
+        y_label = "Absorbance"
+        optical_property = "Abs"
+
+    # window['_EXIT_'].Update(visible = True)
+
+    number = 0
+    files = []
+    for fileName in content_dir:
+        if fileName.find("csv") != -1:
+            if fileName.find(optical_property) != -1:
+                number += 1
+                files.append(fileName.replace('.csv', ''))
+
+            elif values["-Absorp-"]:
+                if fileName.find("R") != -1 or fileName.find("TT") != -1:
+                    number += 1
+                    files.append(fileName.replace('.csv', ''))
+
+    window["-list-"].Update(files)
+    return [dir_path, optical_property, y_label, files]
+
+
+def get_plot_values(path_dir, TRA, yNome, files, values, ax1, ax2):
+    for wv_range, rgb in rainbow_rgb.items():
+        visible_light = ax2.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
+
+    files_selected_beta = values["-list-"]
+    files_selected = []
+    for file in files_selected_beta:
+        file_csv = file + ".csv"
+        files_selected.append(file_csv)
+
+    # print(files_selected)
+    line_1 = []
+    line_2 = []
+    nlines = 0
+    for file_name in files_selected:
+
+        if file_name.find(".csv") != -1:
+
+            if values["-Absorp-"] == False:
+
+                [values_x_2, values_y_2] = import_data(path_dir, file_name)
+
+                abs_dataframe = pd.DataFrame(values_y_2)
+                abs_column_label = abs_dataframe.columns[0]
+
+                legend_name = file_name.replace('.csv', '')
+                legend_name = legend_name.replace(" " + TRA, '')
+                legend_name = legend_name.replace(" ", '/')
+                legend_name = make_legend(legend_name)
+
+                line_1.append("")
+                line_2.append("")
+                color_chosen = values["C" + str(nlines + 1)]
+                line_1[nlines], = ax1.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                           linewidth=0.9,
+                                           color=color_dictionary[color_chosen])
+                line_2[nlines], = ax2.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                           linewidth=0.9,
+                                           color=color_dictionary[color_chosen])
+                nlines += 1
+
+            elif values["-Absorp-"]:
+
+                file_name_import = file_name
+
+                find_t = file_name.find("TT")
+                find_r = file_name.find("R")
+
+                search = ''
+                if find_t >= 0:
+                    file_name = file_name.replace('TT', '')
+                    search = "R"
+                elif find_r >= 0:
+                    file_name = file_name.replace('R', '')
+                    search = "TT"
+                file_name = file_name.replace('.csv', '')
+
+                file_name_check = [i for i in files_selected if file_name and search in i]
+
+                print(file_name_check)
+
+                index = -1
+                for f in file_name_check:
+                    index += 1
+                    f = f.replace('.csv', '')
+
+                    if find_t >= 0:
+                        f = f.replace('R', '')
+
+                    elif find_r >= 0:
+                        f = f.replace('TT', '')
+
+                    if file_name == f:
+                        break
+
+                if file_name == f:
+                    fileName_import2 = file_name_check[index]
+                    print(file_name_import)
+                    print(fileName_import2)
+
+                    [values_x_1, values_y_1] = import_data(path_dir, file_name_import)
+                    [values_x_2, values_y_2] = import_data(path_dir, fileName_import2)
+
+                    files_selected.remove(fileName_import2)
+
+                    abs_dataframe = pd.DataFrame(100 - values_y_1 - values_y_2)
+                    abs_column_label = abs_dataframe.columns[0]
+
+                    legend_name = file_name
+                    # legend_name=legend_name.replace(" ",'/')
+                    legend_name = writeL(legend_name)
+
+                    # last_char_index = legend_name.rfind("/")
+                    # legend_name =  legend_name[:last_char_index]
+                    line_1.append("")
+                    line_2.append("")
+                    color_chosen = values["C" + str(nlines + 1)]
+                    line_1[nlines], = ax1.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                               linewidth=0.9,
+                                               color=color_dictionary[color_chosen])
+                    line_2[nlines], = ax2.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                               linewidth=0.9,
+                                               color=color_dictionary[color_chosen])
+                    nlines += 1
+
+    font_size = 17
+    ax1.set_xlabel('Wavelength (nm)', fontsize=font_size)
+    ax1.set_ylabel(yNome, fontsize=font_size)
+    ###
+    ax1.tick_params(axis="x", labelsize=font_size)
+    ax1.tick_params(axis="y", labelsize=font_size)
+    ax1.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax1.yaxis.set_minor_locator(AutoMinorLocator(2))
+
+    ax2.set_xlabel('Wavelength (nm)', fontsize=font_size)
+    ax2.set_ylabel(yNome, fontsize=font_size)
+
+    ##
+    ax2.tick_params(axis="x", labelsize=font_size)
+    ax2.tick_params(axis="y", labelsize=font_size)
+    ax2.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax2.yaxis.set_minor_locator(AutoMinorLocator(2))
+
+    [xmin, xmax, ymin, ymax] = AxesGraph(values)
+    if values['-ymax-']:
+        ax1.set_ylim(ymin, ymax)
+        ax2.set_ylim(ymin, ymax)
+
+    return ([line_1, line_2, visible_light])  # text labels
+
+
+def AxesGraph(values):
+    xmin = float(values['-xmin-'])
+    ymin = float(values['-ymin-'])
+    if not not values['-xmax-']:
+        xmax = float(values['-xmax-'])
+    else:
+        xmax = values['-xmax-']
+    ymax = float(values['-ymax-'])
+    return [xmin, xmax, ymin, ymax]
