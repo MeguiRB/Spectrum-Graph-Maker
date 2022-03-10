@@ -14,7 +14,7 @@ import pickle as pkl  # to edit the plots if needed
 from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
-from Functions import filter_files, get_plot_values, AxesGraph, write_text
+from Functions import filter_files, get_plot_values, get_axes, write_text
 from Plot_Legend_Functions import place_legend, framing, show_legend_editor, show_legend, get_legend_parameters
 
 matplotlib.use('TkAgg')  # plot window
@@ -61,7 +61,7 @@ while True:
         plt.show()
 
     elif event == "Set Axis":
-        [xmin, xmax, ymin, ymax] = AxesGraph(values)
+        [xmin, xmax, ymin, ymax] = get_axes(values)
 
         if values['-xmax-']:
             ax.set_xlim(xmin, xmax)

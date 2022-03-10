@@ -177,14 +177,14 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
 
-    [xmin, xmax, ymin, ymax] = AxesGraph(values)
+    [xmin, xmax, ymin, ymax] = get_axes(values)
     if values['-ymax-']:
         ax.set_ylim(ymin, ymax)
 
     return [lines_plots, visible_light]  # text labels
 
 
-def AxesGraph(values):
+def get_axes(values):
     xmin = float(values['-xmin-'])
     ymin = float(values['-ymin-'])
     if not not values['-xmax-']:
