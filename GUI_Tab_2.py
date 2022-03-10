@@ -47,7 +47,7 @@ column_1 = [[sg.T("Columns:"), sg.Input('1', key="-columns-", size=box_size), sg
 
 column_2 = [[sg.T(" "), sg.Button("  Update \n Legend", key="Update", size=(9, 5))]]
 
-tab2_layout.extend([[sg.pin(sg.T("               ", key="space_c", visible=False)),
+tab2_layout.extend([[sg.pin(sg.T("                  ", key="space_c", visible=False)),
                      sg.pin(sg.Button("Change legend", key="-ChLeg-", visible=False))],
                     [sg.HorizontalSeparator(key="Separate2")],
                     [sg.Column(column_1), sg.Column(column_2)]])

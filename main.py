@@ -15,16 +15,17 @@ from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
 from Functions import filter_files, get_plot_values, get_axes, write_text
-from Plot_Legend_Functions import place_legend, framing, show_legend_editor, show_legend, get_legend_parameters
+from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
 
 # Building Window
-layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, tooltip='tip'), sg.Tab('Legend', tab2_layout)]], tooltip='TIP2')],
+layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, key='_tab1_'), sg.Tab('Legend', tab2_layout, key='_tab2_')]])],
           [sg.T("File Name:"), sg.Input(key="-Save-", size=(30, 4), change_submits=True), sg.Button("Save")]]
 
 window = sg.Window('My Graph Maker', layout, size=(680, 450), resizable=True, finalize=True)
+
 window['Position 1'].bind('<ButtonRelease-1>', 'CHANGE')
 window['Position 2'].bind('<ButtonRelease-1>', 'CHANGE')
 
@@ -60,6 +61,7 @@ while True:
         show_legend(ax, legend_parameters)
         plt.show()
 
+
     elif event == "Set Axis":
         [xmin, xmax, ymin, ymax] = get_axes(values)
 
@@ -67,6 +69,7 @@ while True:
             ax.set_xlim(xmin, xmax)
         ax.set_ylim(ymin, ymax)
         plt.show()
+
 
     elif event == "-ChLeg-":  # Change legend
 
@@ -127,4 +130,5 @@ while True:
         NomeImage_a = dirName_images + '/' + NomeImage + '.png'
         NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
         fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
-        pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+        pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
+                 open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
