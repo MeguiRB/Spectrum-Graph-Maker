@@ -185,14 +185,14 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
 
 
 def get_axes(values):
-    xmin = float(values['-xmin-'])
-    ymin = float(values['-ymin-'])
+    x_min = float(values['-xmin-'])
+    y_min = float(values['-ymin-'])
     if not not values['-xmax-']:
-        xmax = float(values['-xmax-'])
+        x_max = float(values['-xmax-'])
     else:
-        xmax = values['-xmax-']
-    ymax = float(values['-ymax-'])
-    return [xmin, xmax, ymin, ymax]
+        x_max = values['-xmax-']
+    y_max = float(values['-ymax-'])
+    return [x_min, x_max, y_min, y_max]
 
 
 def write_text(string):
