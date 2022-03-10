@@ -34,8 +34,6 @@ while True:
     event, values = window.read()
 
     if event == sg.WIN_CLOSED:  # or event=="Exit": # if user closes window
-        if plt.fignum_exists(1):
-            print("hello")
         break
 
     elif event == "Submit":
