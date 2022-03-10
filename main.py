@@ -14,7 +14,8 @@ import pickle as pkl  # to edit the plots if needed
 from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
-from Functions import filter_files, get_plot_values, get_axes, write_text
+from Functions import filter_files, get_plot_values, write_text
+from Axes_Functions import get_axes, set_axes, set_axes_from_plot
 from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
 
 matplotlib.use('TkAgg')  # plot window
@@ -56,20 +57,15 @@ while True:
 
         [lines_plots, visible_light] = get_plot_values(path_dir, TRA, yNome, files, values, ax)
         show_legend_editor(window, lines_plots)
-
         legend_parameters = get_legend_parameters(values)
         show_legend(ax, legend_parameters)
+        set_axes_from_plot(ax, window)
         plt.show()
-
 
     elif event == "Set Axis":
-        [xmin, xmax, ymin, ymax] = get_axes(values)
-
-        if values['-xmax-']:
-            ax.set_xlim(xmin, xmax)
-        ax.set_ylim(ymin, ymax)
+        axes = get_axes(values)
+        set_axes(axes, ax)
         plt.show()
-
 
     elif event == "-ChLeg-":  # Change legend
 

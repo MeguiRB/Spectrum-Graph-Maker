@@ -103,8 +103,8 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
                 lines_plots.append("")
                 color_chosen = values["C" + str(nlines + 1)]
                 lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                          linewidth=0.9,
-                                          color=color_dictionary[color_chosen])
+                                               linewidth=0.9,
+                                               color=color_dictionary[color_chosen])
                 nlines += 1
 
             elif values["-Absorp-"]:
@@ -164,8 +164,8 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
                     lines_plots.append("")
                     color_chosen = values["C" + str(nlines + 1)]
                     lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                              linewidth=0.9,
-                                              color=color_dictionary[color_chosen])
+                                                   linewidth=0.9,
+                                                   color=color_dictionary[color_chosen])
                     nlines += 1
 
     font_size = 17
@@ -177,22 +177,7 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
 
-    [xmin, xmax, ymin, ymax] = get_axes(values)
-    if values['-ymax-']:
-        ax.set_ylim(ymin, ymax)
-
     return [lines_plots, visible_light]  # text labels
-
-
-def get_axes(values):
-    x_min = float(values['-xmin-'])
-    y_min = float(values['-ymin-'])
-    if not not values['-xmax-']:
-        x_max = float(values['-xmax-'])
-    else:
-        x_max = values['-xmax-']
-    y_max = float(values['-ymax-'])
-    return [x_min, x_max, y_min, y_max]
 
 
 def write_text(string):

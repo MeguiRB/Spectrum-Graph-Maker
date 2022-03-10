@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 
 sg.theme("DarkTeal2")
-box_size = (4, 4)
+box_size = (8, 4)
 
 column_a = [[sg.Text('Files', font=("bold", 11))],
             [sg.Listbox(values=[], select_mode='extended', key='-list-', size=(30, 10))]
@@ -9,10 +9,10 @@ column_a = [[sg.Text('Files', font=("bold", 11))],
 
 column_b1 = [[sg.Text('Axis:', font=("bold", 11))]]
 column_b2 = [
-    [sg.Text('x min:'), sg.Input('0', key="-xmin-", size=box_size), sg.Text('x max:'),
+    [sg.Text('x min:'), sg.Input('', key="-xmin-", size=box_size), sg.Text('x max:'),
      sg.Input('', key="-xmax-", size=box_size)],
-    [sg.Text('y min:'), sg.Input('0', key="-ymin-", size=box_size), sg.Text('y max:'),
-     sg.Input('100', key="-ymax-", size=box_size)]
+    [sg.Text('y min:'), sg.Input('', key="-ymin-", size=box_size), sg.Text('y max:'),
+     sg.Input('', key="-ymax-", size=box_size)]
 ]
 column_b3 = [[sg.Button("Set Axis")]]
 
