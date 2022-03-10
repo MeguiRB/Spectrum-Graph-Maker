@@ -60,7 +60,6 @@ while True:
         show_legend(ax, legend_parameters)
         plt.show()
 
-
     elif event == "Set Axis":
         [xmin, xmax, ymin, ymax] = AxesGraph(values)
 
@@ -68,7 +67,6 @@ while True:
             ax.set_xlim(xmin, xmax)
         ax.set_ylim(ymin, ymax)
         plt.show()
-
 
     elif event == "-ChLeg-":  # Change legend
 
@@ -92,27 +90,22 @@ while True:
         show_legend(ax, legend_parameters)
         plt.show()
 
-
     elif event == "Position 1" + "CHANGE":
         window["-leg-"].update(disabled=False)
         window['_SPINX_'].update(disabled=True)
         window['_SPINY_'].update(disabled=True)
-
 
     elif event == "Position 2" + "CHANGE":
         window["-leg-"].update(disabled=True)
         window['_SPINX_'].update(disabled=False)
         window['_SPINY_'].update(disabled=False)
 
-
     elif event == "Update":
         legend_parameters = get_legend_parameters(values)
         show_legend(ax, legend_parameters)
         plt.show()
 
-
     elif event == "Set Title":
-
         title_chosen = values["-title-"]
         title_chosen = write_text(title_chosen)
         ax.set_title(title_chosen, fontsize=17)
@@ -129,11 +122,9 @@ while True:
         if not os.path.exists(dirName_pickle):
             os.mkdir(dirName_pickle)
 
-        # parameters = [legend_position, box, number_columns, size_legend_letter, frameL]
         NomeImage = values["-Save-"]
 
         NomeImage_a = dirName_images + '/' + NomeImage + '.png'
         NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
         fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
-        # pkl.dump((fig_handle, ax, lines_plots, parameters, visible_light),
-        pkl.dump((fig_handle, ax, lines_plots, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+        pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
