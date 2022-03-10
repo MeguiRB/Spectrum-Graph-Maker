@@ -42,25 +42,27 @@ while True:
 
         path_dir: str = values["-IN2-"]
         if not path_dir:  # is empty
-            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the paste!", u"Error", 0)
+            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
         else:
-            [path_dir, TRA, yNome, files] = filter_files(values, window)
+            [path_dir, TRA, y_label, files] = filter_files(values, window)
             print(values["-IN-"])
 
     elif event == "MakeGraph":
+        if "files" in locals():  # variable files exists
+            if not plt.fignum_exists(1):
+                fig_handle, ax = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
+                fig_handle.patch.set_alpha(0)
+            else:
+                ax.cla()
 
-        if not plt.fignum_exists(1):
-            fig_handle, ax = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
-            fig_handle.patch.set_alpha(0)
+            [lines_plots, visible_light] = get_plot_values(path_dir, TRA, y_label, files, values, ax)
+            show_legend_editor(window, lines_plots)
+            legend_parameters = get_legend_parameters(values)
+            show_legend(ax, legend_parameters)
+            set_axes_from_plot(ax, window)
+            plt.show()
         else:
-            ax.cla()
-
-        [lines_plots, visible_light] = get_plot_values(path_dir, TRA, yNome, files, values, ax)
-        show_legend_editor(window, lines_plots)
-        legend_parameters = get_legend_parameters(values)
-        show_legend(ax, legend_parameters)
-        set_axes_from_plot(ax, window)
-        plt.show()
+            ctypes.windll.user32.MessageBoxW(0, u"You haven't chosen any files!", u"Error", 0)
 
     elif event == "Set Axis":
         axes = get_axes(values)
