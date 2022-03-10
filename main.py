@@ -15,7 +15,7 @@ from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
 from Functions import filter_files, get_plot_values, AxesGraph, write_text
-from Plot_Legend_Functions import place_legend, framing, show_legend_edit
+from Plot_Legend_Functions import place_legend, framing, show_legend_editor, show_legend, get_legend_parameters
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -32,6 +32,8 @@ while True:
     event, values = window.read()
 
     if event == sg.WIN_CLOSED:  # or event=="Exit": # if user closes window
+        if plt.fignum_exists(1):
+            print("hello")
         break
 
     elif event == "Submit":
@@ -52,19 +54,10 @@ while True:
             ax.cla()
 
         [lines_plots, visible_light] = get_plot_values(path_dir, TRA, yNome, files, values, ax)
-        show_legend_edit(window, lines_plots)
-        [legend_position, box] = place_legend(values)
-        number_columns = int(values['-columns-'])
-        frameL = framing(values)
-        size_legend_letter = values["-Tsize-"]
+        show_legend_editor(window, lines_plots)
 
-        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                                    prop={'size': size_legend_letter}, frameon=frameL,
-                                    framealpha=1, borderpad=0.5)
-
-        frameC = legend_variable.get_frame()
-        frameC.set_edgecolor('black')
-
+        legend_parameters = get_legend_parameters(values)
+        show_legend(ax, legend_parameters)
         plt.show()
 
 
@@ -80,7 +73,6 @@ while True:
     elif event == "-ChLeg-":  # Change legend
 
         for leg_number in range(1, len(lines_plots) + 1):
-
             leg_number_key = str(leg_number)
             leg_text = values[leg_number_key]
             width = values["W" + leg_number_key]
@@ -97,14 +89,9 @@ while True:
             lines_plots[position].set_color(color_dictionary[color_chosen])
 
         # call legend to show update
-        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                                    prop={'size': size_legend_letter}, frameon=frameL,
-                                    framealpha=1, borderpad=0.5)
-        frameC = legend_variable.get_frame()
-        frameC.set_edgecolor('black')
+        show_legend(ax, legend_parameters)
         plt.show()
 
-        plt.show()
 
     elif event == "Position 1" + "CHANGE":
         window["-leg-"].update(disabled=False)
@@ -119,17 +106,8 @@ while True:
 
 
     elif event == "Update":
-
-        frameL = framing(values)
-        size_legend_letter = values["-Tsize-"]
-        [legend_position, box] = place_legend(values)
-        number_columns = int(values['-columns-'])
-
-        legend_variable = ax.legend(loc=legend_position, bbox_to_anchor=box, ncol=number_columns,
-                                    prop={'size': size_legend_letter}, frameon=frameL,
-                                    framealpha=1, borderpad=0.5)
-        frameC = legend_variable.get_frame()
-        frameC.set_edgecolor('black')
+        legend_parameters = get_legend_parameters(values)
+        show_legend(ax, legend_parameters)
         plt.show()
 
 
@@ -151,10 +129,11 @@ while True:
         if not os.path.exists(dirName_pickle):
             os.mkdir(dirName_pickle)
 
-        parameters = [legend_position, box, number_columns, size_legend_letter, frameL]
+        # parameters = [legend_position, box, number_columns, size_legend_letter, frameL]
         NomeImage = values["-Save-"]
 
         NomeImage_a = dirName_images + '/' + NomeImage + '.png'
         NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
         fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
-        pkl.dump((fig_handle, ax, lines_plots, parameters, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+        # pkl.dump((fig_handle, ax, lines_plots, parameters, visible_light),
+        pkl.dump((fig_handle, ax, lines_plots, visible_light), open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))

@@ -11,7 +11,7 @@ def place_legend(values):
     return [legend_position, box]
 
 
-def show_legend_edit(window, lines_plots):
+def show_legend_editor(window, lines_plots):
     for leg in range(1, 11):
         if leg < len(lines_plots) + 1:
             vis = True
@@ -33,3 +33,22 @@ def framing(values):
     else:
         legend_frame = False
     return legend_frame
+
+
+def get_legend_parameters(values):
+
+    put_frame = framing(values)
+    size_legend_letter = values["-Tsize-"]
+    [legend_position, box] = place_legend(values)
+    number_columns = int(values['-columns-'])
+
+    return [legend_position, box, number_columns, size_legend_letter, put_frame]
+
+
+def show_legend(ax, parameters):
+
+    legend_variable = ax.legend(loc=parameters[0], bbox_to_anchor=parameters[1], ncol=parameters[2],
+                                prop={'size': parameters[3]}, frameon=parameters[4],
+                                framealpha=1, borderpad=0.5)
+    frame = legend_variable.get_frame()
+    frame.set_edgecolor('black')
