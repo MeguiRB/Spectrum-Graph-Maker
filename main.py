@@ -43,7 +43,7 @@ while True:
         if not path_dir:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
         else:
-            [path_dir, TRA, y_label] = filter_files(values, window)
+            [TRA, y_label] = filter_files(values, window)
             print(values["-IN-"])
 
     elif event == "MakeGraph":

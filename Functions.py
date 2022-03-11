@@ -24,52 +24,45 @@ def import_data(dir_path, file):
     return [df[x_column_label], df[y_column_label]]
 
 
-def filter_files(values, window):
-    dir_path: str = values["-IN2-"]
-
-    content_dir: List[str] = os.listdir(dir_path)
-    content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
-
+def get_chosen_parameter(values):
     optical_property, y_label = '', ''
+
     if values["-Trans-"]:
-        if values["-Total-"]:
-            optical_property = "TT"
-        elif values["-Spec-"]:
-            optical_property = "TE"
+        optical_property = "TT"
         y_label = "Transmittance (%)"
 
     elif values["-Refl-"]:
-        if values["-Total-"]:
-            optical_property = "R"
-        elif values["-Dif-"]:
-            optical_property = "RD"
+        optical_property = "R"
         y_label = "Reflectance (%)"
 
     elif values["-Absorp-"]:
         y_label = "Absorption (%)"
-        optical_property = "-----"
 
     elif values["-Absorb-"]:
         y_label = "Absorbance"
         optical_property = "Abs"
 
-    # window['_EXIT_'].Update(visible = True)
+    return [optical_property, y_label]
 
-    number = 0
-    files = []
+
+def filter_files(values, window):
+    [optical_property, y_label] = get_chosen_parameter(values)
+
+    dir_path: str = values["-IN2-"]
+    content_dir: List[str] = os.listdir(dir_path)
+    content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
+
+    name_files = []
     for fileName in content_dir:
-        if fileName.find("csv") != -1:
-            if fileName.find(optical_property) != -1:
-                number += 1
-                files.append(fileName.replace('.csv', ''))
 
-            elif values["-Absorp-"]:
-                if fileName.find("R") != -1 or fileName.find("TT") != -1:
-                    number += 1
-                    files.append(fileName.replace('.csv', ''))
+        if fileName.find("csv") != -1 and fileName.find(optical_property) != -1:
+            name_files.append(fileName.replace('.csv', ''))
 
-    window["-list-"].Update(files)
-    return [dir_path, optical_property, y_label]
+        elif values["-Absorp-"] and (fileName.find("R") != -1 or fileName.find("TT") != -1):
+            name_files.append(fileName.replace('.csv', ''))
+
+    window["-list-"].Update(name_files)
+    return [optical_property, y_label]
 
 
 def get_plot_values(path_dir, TRA, y_label, values, ax):
