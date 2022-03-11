@@ -112,19 +112,20 @@ while True:
 
     elif event == "Save":
 
-        dirName_images = os.sep.join([path_dir, "Images"])
-        dirName_pickle = os.sep.join([path_dir, "Pickles"])
+        if plt.fignum_exists(1):
+            dirName_images = os.sep.join([path_dir, "Images"])
+            dirName_pickle = os.sep.join([path_dir, "Pickles"])
 
-        if not os.path.exists(dirName_images):
-            os.mkdir(dirName_images)
+            if not os.path.exists(dirName_images):
+                os.mkdir(dirName_images)
 
-        if not os.path.exists(dirName_pickle):
-            os.mkdir(dirName_pickle)
+            if not os.path.exists(dirName_pickle):
+                os.mkdir(dirName_pickle)
 
-        NomeImage = values["-Save-"]
+            NomeImage = values["-Save-"]
 
-        NomeImage_a = dirName_images + '/' + NomeImage + '.png'
-        NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
-        fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
-        pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
-                 open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+            NomeImage_a = dirName_images + '/' + NomeImage + '.png'
+            NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
+            fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
+            pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
+                     open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
