@@ -80,7 +80,8 @@ while True:
                 leg_text = write_text(leg_text)
                 lines_plots[position].set_label(leg_text)
 
-            lines_plots[position].set_linewidth(width)
+            if width.isdigit():
+                lines_plots[position].set_linewidth(width)
             lines_plots[position].set_linestyle(line_style)
             lines_plots[position].set_color(color_dictionary[color_chosen])
 
