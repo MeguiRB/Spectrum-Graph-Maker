@@ -30,6 +30,7 @@ def filter_files(values, window):
     content_dir: List[str] = os.listdir(dir_path)
     content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
 
+    optical_property, y_label = '', ''
     if values["-Trans-"]:
         if values["-Total-"]:
             optical_property = "TT"
@@ -68,10 +69,10 @@ def filter_files(values, window):
                     files.append(fileName.replace('.csv', ''))
 
     window["-list-"].Update(files)
-    return [dir_path, optical_property, y_label, files]
+    return [dir_path, optical_property, y_label]
 
 
-def get_plot_values(path_dir, TRA, yNome, files, values, ax):
+def get_plot_values(path_dir, TRA, y_label, values, ax):
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
@@ -83,12 +84,12 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
 
     # print(files_selected)
     lines_plots = []
-    nlines = 0
+    n_lines = 0
     for file_name in files_selected:
 
         if file_name.find(".csv") != -1:
 
-            if values["-Absorp-"] == False:
+            if not values["-Absorp-"]:
 
                 [values_x_2, values_y_2] = import_data(path_dir, file_name)
 
@@ -101,11 +102,11 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
-                color_chosen = values["C" + str(nlines + 1)]
-                lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                               linewidth=0.9,
-                                               color=color_dictionary[color_chosen])
-                nlines += 1
+                color_chosen = values["C" + str(n_lines + 1)]
+                lines_plots[n_lines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                                linewidth=0.9,
+                                                color=color_dictionary[color_chosen])
+                n_lines += 1
 
             elif values["-Absorp-"]:
 
@@ -162,16 +163,16 @@ def get_plot_values(path_dir, TRA, yNome, files, values, ax):
                     # legend_name =  legend_name[:last_char_index]
 
                     lines_plots.append("")
-                    color_chosen = values["C" + str(nlines + 1)]
-                    lines_plots[nlines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                                   linewidth=0.9,
-                                                   color=color_dictionary[color_chosen])
-                    nlines += 1
+                    color_chosen = values["C" + str(n_lines + 1)]
+                    lines_plots[n_lines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                                                    linewidth=0.9,
+                                                    color=color_dictionary[color_chosen])
+                    n_lines += 1
 
     font_size = 17
 
     ax.set_xlabel('Wavelength (nm)', fontsize=font_size)
-    ax.set_ylabel(yNome, fontsize=font_size)
+    ax.set_ylabel(y_label, fontsize=font_size)
     ax.tick_params(axis="x", labelsize=font_size)
     ax.tick_params(axis="y", labelsize=font_size)
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
