@@ -65,6 +65,49 @@ def filter_files(values, window):
     return [optical_property, y_label]
 
 
+def pair_rt_files(file_name, files_selected):
+    """pair reflectance and transmittance files"""
+
+    file_name_import = file_name
+    find_t = file_name.find("TT")
+    find_r = file_name.find("R")
+
+    search = ''
+    if find_t >= 0:
+        file_name = file_name.replace('TT', '')
+        search = "R"
+    elif find_r >= 0:
+        file_name = file_name.replace('R', '')
+        search = "TT"
+    file_name = file_name.replace('.csv', '')
+
+    file_name_check = [i for i in files_selected if file_name and search in i]
+
+    print(file_name_check)
+
+    index = -1
+    f = ''
+    for f in file_name_check:
+        index += 1
+        f = f.replace('.csv', '')
+
+        if find_t >= 0:
+            f = f.replace('R', '')
+
+        elif find_r >= 0:
+            f = f.replace('TT', '')
+
+        if file_name == f:
+            break
+
+    if file_name == f:
+        file_name_import2 = file_name_check[index]
+        print(file_name_import)
+        print(file_name_import2)
+        files_selected.remove(file_name_import2)
+        return [file_name_import, file_name_import2, files_selected]
+
+
 def make_plot(path_dir, TRA, y_label, values, ax):
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
@@ -74,89 +117,40 @@ def make_plot(path_dir, TRA, y_label, values, ax):
 
     lines_plots = []
     n_lines = 0
-    for file_name in files_selected:
+    for file_name, legend_name in zip(files_selected, files_selected_beta):
 
-        if file_name.find(".csv") != -1:
+        if not values["-Absorp-"]:
+            [values_x, values_y] = import_data(path_dir, file_name)
+            legend_name = legend_name.replace(" " + TRA, '')
+            legend_name = write_text(legend_name)
 
-            if not values["-Absorp-"]:
+            lines_plots.append("")
+            color_chosen = values["C" + str(n_lines + 1)]
+            lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name,
+                                            linewidth=0.9,
+                                            color=color_dictionary[color_chosen])
+            n_lines += 1
 
-                [values_x_2, values_y_2] = import_data(path_dir, file_name)
+        elif values["-Absorp-"]:
+            pair = pair_rt_files(file_name, files_selected)
+            if pair:
+                file_name_import, file_name_import2, files_selected = pair[0], pair[1], pair[2]
 
-                abs_dataframe = pd.DataFrame(values_y_2)
+                [values_x, values_y_1] = import_data(path_dir, file_name_import)
+                [values_x, values_y_2] = import_data(path_dir, file_name_import2)
+
+                abs_dataframe = pd.DataFrame(100 - values_y_1 - values_y_2)
                 abs_column_label = abs_dataframe.columns[0]
+                values_y = abs_dataframe[abs_column_label]
 
-                legend_name = file_name.replace('.csv', '')
-                legend_name = legend_name.replace(" " + TRA, '')
-                legend_name = legend_name.replace(" ", '/')
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
                 color_chosen = values["C" + str(n_lines + 1)]
-                lines_plots[n_lines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
+                lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name,
                                                 linewidth=0.9,
                                                 color=color_dictionary[color_chosen])
                 n_lines += 1
-
-            elif values["-Absorp-"]:
-
-                file_name_import = file_name
-
-                find_t = file_name.find("TT")
-                find_r = file_name.find("R")
-
-                search = ''
-                if find_t >= 0:
-                    file_name = file_name.replace('TT', '')
-                    search = "R"
-                elif find_r >= 0:
-                    file_name = file_name.replace('R', '')
-                    search = "TT"
-                file_name = file_name.replace('.csv', '')
-
-                file_name_check = [i for i in files_selected if file_name and search in i]
-
-                print(file_name_check)
-
-                index = -1
-                for f in file_name_check:
-                    index += 1
-                    f = f.replace('.csv', '')
-
-                    if find_t >= 0:
-                        f = f.replace('R', '')
-
-                    elif find_r >= 0:
-                        f = f.replace('TT', '')
-
-                    if file_name == f:
-                        break
-
-                if file_name == f:
-                    file_name_import2 = file_name_check[index]
-                    print(file_name_import)
-                    print(file_name_import2)
-
-                    [values_x_1, values_y_1] = import_data(path_dir, file_name_import)
-                    [values_x_2, values_y_2] = import_data(path_dir, file_name_import2)
-
-                    files_selected.remove(file_name_import2)
-
-                    abs_dataframe = pd.DataFrame(100 - values_y_1 - values_y_2)
-                    abs_column_label = abs_dataframe.columns[0]
-
-                    legend_name = file_name
-                    # legend_name=legend_name.replace(" ",'/')
-                    legend_name = write_text(legend_name)
-
-                    # last_char_index = legend_name.rfind("/")
-                    # legend_name =  legend_name[:last_char_index]
-
-                    lines_plots.append("")
-                    color_chosen = values["C" + str(n_lines + 1)]
-                    lines_plots[n_lines], = ax.plot(values_x_2, abs_dataframe[abs_column_label], label=legend_name,
-                                                    linewidth=0.9,
-                                                    color=color_dictionary[color_chosen])
-                    n_lines += 1
 
     font_size = 17
 

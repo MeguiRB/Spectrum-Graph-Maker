@@ -17,7 +17,6 @@ from GUI_Tab_2 import tab2_layout
 from Functions import filter_files, make_plot, write_text
 from Axes_Functions import get_axes, set_axes, set_axes_from_plot
 from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
-from matplotlib.ticker import AutoMinorLocator
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
