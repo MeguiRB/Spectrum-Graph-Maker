@@ -80,32 +80,21 @@ def pair_rt_files(file_name, files_selected):
         file_name = file_name.replace('R', '')
         search = "TT"
     file_name = file_name.replace('.csv', '')
-
     file_name_check = [i for i in files_selected if file_name and search in i]
 
-    print(file_name_check)
-
     index = -1
-    f = ''
-    for f in file_name_check:
+    for possible_file in file_name_check:
         index += 1
-        f = f.replace('.csv', '')
+        possible_file = possible_file.replace('.csv', '')
 
-        if find_t >= 0:
-            f = f.replace('R', '')
-
-        elif find_r >= 0:
-            f = f.replace('TT', '')
-
-        if file_name == f:
-            break
-
-    if file_name == f:
-        file_name_import2 = file_name_check[index]
-        print(file_name_import)
-        print(file_name_import2)
-        files_selected.remove(file_name_import2)
-        return [file_name_import, file_name_import2, files_selected]
+        if search == "R":
+            possible_file = possible_file.replace('R', '')
+        if search == "TT":
+            possible_file = possible_file.replace('TT', '')
+        if file_name == possible_file:
+            file_name_import_2 = file_name_check[index]
+            files_selected.remove(file_name_import_2)
+            return [file_name_import, file_name_import_2, files_selected]
 
 
 def make_plot(path_dir, TRA, y_label, values, ax):
@@ -134,10 +123,10 @@ def make_plot(path_dir, TRA, y_label, values, ax):
         elif values["-Absorp-"]:
             pair = pair_rt_files(file_name, files_selected)
             if pair:
-                file_name_import, file_name_import2, files_selected = pair[0], pair[1], pair[2]
+                file_name_import, file_name_import_2, files_selected = pair[0], pair[1], pair[2]
 
                 [values_x, values_y_1] = import_data(path_dir, file_name_import)
-                [values_x, values_y_2] = import_data(path_dir, file_name_import2)
+                [values_x, values_y_2] = import_data(path_dir, file_name_import_2)
 
                 abs_dataframe = pd.DataFrame(100 - values_y_1 - values_y_2)
                 abs_column_label = abs_dataframe.columns[0]
