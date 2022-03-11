@@ -173,10 +173,9 @@ def get_plot_values(path_dir, TRA, y_label, values, ax):
 
     ax.set_xlabel('Wavelength (nm)', fontsize=font_size)
     ax.set_ylabel(y_label, fontsize=font_size)
-    ax.tick_params(axis="x", labelsize=font_size)
-    ax.tick_params(axis="y", labelsize=font_size)
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.tick_params(labelsize=font_size, top=False, right=False, which='both')  # both major and minor ticks are affected
 
     return [lines_plots, visible_light]  # text labels
 
