@@ -143,14 +143,14 @@ def get_plot_values(path_dir, TRA, y_label, values, ax):
                         break
 
                 if file_name == f:
-                    fileName_import2 = file_name_check[index]
+                    file_name_import2 = file_name_check[index]
                     print(file_name_import)
-                    print(fileName_import2)
+                    print(file_name_import2)
 
                     [values_x_1, values_y_1] = import_data(path_dir, file_name_import)
-                    [values_x_2, values_y_2] = import_data(path_dir, fileName_import2)
+                    [values_x_2, values_y_2] = import_data(path_dir, file_name_import2)
 
-                    files_selected.remove(fileName_import2)
+                    files_selected.remove(file_name_import2)
 
                     abs_dataframe = pd.DataFrame(100 - values_y_1 - values_y_2)
                     abs_column_label = abs_dataframe.columns[0]
