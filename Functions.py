@@ -65,17 +65,13 @@ def filter_files(values, window):
     return [optical_property, y_label]
 
 
-def get_plot_values(path_dir, TRA, y_label, values, ax):
+def make_plot(path_dir, TRA, y_label, values, ax):
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
     files_selected_beta = values["-list-"]
-    files_selected = []
-    for file in files_selected_beta:
-        file_csv = file + ".csv"
-        files_selected.append(file_csv)
+    files_selected = [file + ".csv" for file in files_selected_beta]
 
-    # print(files_selected)
     lines_plots = []
     n_lines = 0
     for file_name in files_selected:

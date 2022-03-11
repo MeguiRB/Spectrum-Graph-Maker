@@ -14,7 +14,7 @@ import pickle as pkl  # to edit the plots if needed
 from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
-from Functions import filter_files, get_plot_values, write_text
+from Functions import filter_files, make_plot, write_text
 from Axes_Functions import get_axes, set_axes, set_axes_from_plot
 from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
 from matplotlib.ticker import AutoMinorLocator
@@ -54,7 +54,7 @@ while True:
             else:
                 ax.cla()
 
-            [lines_plots, visible_light] = get_plot_values(path_dir, TRA, y_label, values, ax)
+            [lines_plots, visible_light] = make_plot(path_dir, TRA, y_label, values, ax)
             show_legend_editor(window, lines_plots)
             legend_parameters = get_legend_parameters(values)
             show_legend(ax, legend_parameters)
