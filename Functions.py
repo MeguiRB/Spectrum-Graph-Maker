@@ -97,6 +97,14 @@ def pair_rt_files(file_name, files_selected):
             return [file_name_import, file_name_import_2, files_selected]
 
 
+def get_line_parameters(num_key, values):
+    color_chosen = values["C" + num_key]
+    line_style = values["S" + num_key]
+    width = values["W" + num_key]
+
+    return [color_chosen, line_style, width]
+
+
 def make_plot(path_dir, TRA, y_label, values, ax):
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
@@ -114,10 +122,10 @@ def make_plot(path_dir, TRA, y_label, values, ax):
             legend_name = write_text(legend_name)
 
             lines_plots.append("")
-            color_chosen = values["C" + str(n_lines + 1)]
-            lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name,
-                                            linewidth=0.9,
-                                            color=color_dictionary[color_chosen])
+
+            [color_chosen, line_style, width] = get_line_parameters(str(n_lines+1), values)
+            lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
+                                            linewidth=width, color=color_dictionary[color_chosen])
             n_lines += 1
 
         elif values["-Absorp-"]:
@@ -135,10 +143,10 @@ def make_plot(path_dir, TRA, y_label, values, ax):
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
-                color_chosen = values["C" + str(n_lines + 1)]
-                lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name,
-                                                linewidth=0.9,
-                                                color=color_dictionary[color_chosen])
+                [color_chosen, line_style, width] = get_line_parameters(str(n_lines+1), values)
+                lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
+                                                linewidth=width, color=color_dictionary[color_chosen])
+
                 n_lines += 1
 
     font_size = 17

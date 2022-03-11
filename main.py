@@ -14,7 +14,7 @@ import pickle as pkl  # to edit the plots if needed
 from Colors import color_dictionary
 from GUI_Tab_1 import tab1_layout
 from GUI_Tab_2 import tab2_layout
-from Functions import filter_files, make_plot, write_text
+from Functions import filter_files, make_plot, write_text, get_line_parameters
 from Axes_Functions import get_axes, set_axes, set_axes_from_plot
 from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
 
@@ -71,18 +71,17 @@ while True:
 
         for leg_number in range(1, len(lines_plots) + 1):
             leg_number_key = str(leg_number)
-            leg_text = values[leg_number_key]
-            width = values["W" + leg_number_key]
-            Type = values["S" + leg_number_key]
-            color_chosen = values["C" + leg_number_key]
 
+            [color_chosen, line_style, width] = get_line_parameters(leg_number_key, values)
+
+            leg_text = values[leg_number_key]
             position = leg_number - 1
             if leg_text:
                 leg_text = write_text(leg_text)
                 lines_plots[position].set_label(leg_text)
 
             lines_plots[position].set_linewidth(width)
-            lines_plots[position].set_linestyle(Type)
+            lines_plots[position].set_linestyle(line_style)
             lines_plots[position].set_color(color_dictionary[color_chosen])
 
         # call legend to show update
