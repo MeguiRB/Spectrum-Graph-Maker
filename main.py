@@ -62,70 +62,69 @@ while True:
         else:
             ctypes.windll.user32.MessageBoxW(0, u"You haven't chosen any files!", u"Error", 0)
 
-    elif event == "Set Axis":
-        axes = get_axes(values)
-        set_axes(axes, ax)
-        plt.show()
+    elif plt.fignum_exists(1):
 
-    elif event == "-ChLeg-":  # Change legend
+        if event == "Set Axis":
+            axes = get_axes(values)
+            set_axes(axes, ax)
+            plt.show()
 
-        for leg_number in range(1, len(lines_plots) + 1):
-            leg_number_key = str(leg_number)
+        elif event == "-ChLeg-":  # Change legend
 
-            [color_chosen, line_style, width] = get_line_parameters(leg_number_key, values)
+            for leg_number in range(1, len(lines_plots) + 1):
+                leg_number_key = str(leg_number)
 
-            leg_text = values[leg_number_key]
-            position = leg_number - 1
-            if leg_text:
-                leg_text = write_text(leg_text)
-                lines_plots[position].set_label(leg_text)
+                [color_chosen, line_style, width] = get_line_parameters(leg_number_key, values)
 
-            if width.isdigit():
-                lines_plots[position].set_linewidth(width)
-            lines_plots[position].set_linestyle(line_style)
-            lines_plots[position].set_color(color_dictionary[color_chosen])
+                leg_text = values[leg_number_key]
+                position = leg_number - 1
+                if leg_text:
+                    leg_text = write_text(leg_text)
+                    lines_plots[position].set_label(leg_text)
 
-        # call legend to show update
-        show_legend(ax, legend_parameters)
-        plt.show()
+                if width.isdigit():
+                    lines_plots[position].set_linewidth(width)
+                lines_plots[position].set_linestyle(line_style)
+                lines_plots[position].set_color(color_dictionary[color_chosen])
 
-    elif event == "Position 1" + "CHANGE":
-        window["-leg-"].update(disabled=False)
-        window['_SPINX_'].update(disabled=True)
-        window['_SPINY_'].update(disabled=True)
+            # call legend to show update
+            show_legend(ax, legend_parameters)
+            plt.show()
 
-    elif event == "Position 2" + "CHANGE":
-        window["-leg-"].update(disabled=True)
-        window['_SPINX_'].update(disabled=False)
-        window['_SPINY_'].update(disabled=False)
+        elif event == "Position 1" + "CHANGE":
+            window["-leg-"].update(disabled=False)
+            window['_SPINX_'].update(disabled=True)
+            window['_SPINY_'].update(disabled=True)
 
-    elif event == "Update":
-        legend_parameters = get_legend_parameters(values)
-        show_legend(ax, legend_parameters)
-        plt.show()
+        elif event == "Position 2" + "CHANGE":
+            window["-leg-"].update(disabled=True)
+            window['_SPINX_'].update(disabled=False)
+            window['_SPINY_'].update(disabled=False)
 
-    elif event == "Set Title":
-        title_chosen = values["-title-"]
-        title_chosen = write_text(title_chosen)
-        ax.set_title(title_chosen, fontsize=17)
-        plt.show()
+        elif event == "Update":
+            legend_parameters = get_legend_parameters(values)
+            show_legend(ax, legend_parameters)
+            plt.show()
 
-    elif event == "Save":
+        elif event == "Set Title":
+            title_chosen = values["-title-"]
+            title_chosen = write_text(title_chosen)
+            ax.set_title(title_chosen, fontsize=17)
+            plt.show()
 
-        if plt.fignum_exists(1):
+        elif event == "Save":
             dirName_images = os.sep.join([path_dir, "Images"])
             dirName_pickle = os.sep.join([path_dir, "Pickles"])
 
             if not os.path.exists(dirName_images):
-                os.mkdir(dirName_images)
+                 os.mkdir(dirName_images)
 
             if not os.path.exists(dirName_pickle):
-                os.mkdir(dirName_pickle)
+                 os.mkdir(dirName_pickle)
 
             NomeImage = values["-Save-"]
-
             NomeImage_a = dirName_images + '/' + NomeImage + '.png'
             NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
             fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
             pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
-                     open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+                         open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
