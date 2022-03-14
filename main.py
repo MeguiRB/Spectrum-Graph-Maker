@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 import os
 import ctypes  # for error message
 import pickle as pkl  # to edit the plots if needed
-from Colors import color_dictionary
-from GUI_Tab_1 import tab1_layout
-from GUI_Tab_2 import tab2_layout
-from Functions import filter_files, make_plot, write_text, get_line_parameters
-from Axes_Functions import get_axes, set_axes, set_axes_from_plot
-from Plot_Legend_Functions import show_legend_editor, show_legend, get_legend_parameters
+from colors import color_dictionary
+from gui_tab_1 import tab1_layout
+from gui_tab_2 import tab2_layout
+from plot_functions import filter_files, make_plot, write_text, get_line_parameters
+from axes_functions import get_axes, set_axes, set_axes_from_plot
+from legend_functions import show_legend_editor, show_legend, get_legend_parameters
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter

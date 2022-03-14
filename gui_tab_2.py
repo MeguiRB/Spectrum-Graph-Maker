@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from Colors import color_dictionary
+from colors import color_dictionary
 
 sg.theme("DarkTeal2")
 box_size = (4, 4)

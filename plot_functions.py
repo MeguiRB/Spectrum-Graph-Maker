@@ -3,7 +3,7 @@ import pandas as pd  # data treatment
 from matplotlib.ticker import AutoMinorLocator
 from typing import List
 import natsort  # sort list
-from Colors import color_dictionary
+from colors import color_dictionary
 import os
 
 
