@@ -142,6 +142,8 @@ def make_plot(path_dir, TRA, y_label, values, ax):
                 abs_column_label = abs_dataframe.columns[0]
                 values_y = abs_dataframe[abs_column_label]
 
+                legend_name = legend_name.replace(" TT", '')
+                legend_name = legend_name.replace(" R", '')
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
