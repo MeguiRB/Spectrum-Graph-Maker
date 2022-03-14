@@ -1,4 +1,4 @@
-from VisibleWavelength import rainbow_rgb
+from visible_wavelength import rainbow_rgb
 import pandas as pd  # data treatment
 from matplotlib.ticker import AutoMinorLocator
 from typing import List
