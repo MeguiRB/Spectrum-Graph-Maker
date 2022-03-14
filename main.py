@@ -113,18 +113,22 @@ while True:
             plt.show()
 
         elif event == "Save":
-            dirName_images = os.sep.join([path_dir, "Images"])
-            dirName_pickle = os.sep.join([path_dir, "Pickles"])
+            dir_name_images = os.sep.join([path_dir, "Images"])
+            dir_name_pickle = os.sep.join([path_dir, "Pickles"])
 
-            if not os.path.exists(dirName_images):
-                 os.mkdir(dirName_images)
+            if not os.path.exists(dir_name_images):
+                os.mkdir(dir_name_images)
 
-            if not os.path.exists(dirName_pickle):
-                 os.mkdir(dirName_pickle)
+            if not os.path.exists(dir_name_pickle):
+                os.mkdir(dir_name_pickle)
 
-            NomeImage = values["-Save-"]
-            NomeImage_a = dirName_images + '/' + NomeImage + '.png'
-            NomeImage_b = dirName_pickle + '/' + NomeImage + '.pickle'
-            fig_handle.savefig(NomeImage_a, dpi=300, bbox_inches='tight')
+            file_name = values["-Save-"]
+
+            # save as png
+            image_file_name = dir_name_images + '/' + file_name + '.png'
+            fig_handle.savefig(image_file_name, dpi=300, bbox_inches='tight')
+
+            # save as pickle
+            pickle_file_name = dir_name_pickle + '/' + file_name + '.pickle'
             pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
-                         open(NomeImage_b, 'wb', pkl.HIGHEST_PROTOCOL))
+                     open(pickle_file_name, 'wb', pkl.HIGHEST_PROTOCOL))
