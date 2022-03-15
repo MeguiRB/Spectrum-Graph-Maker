@@ -16,13 +16,15 @@ from gui_tab_1 import tab1_layout
 from gui_tab_2 import tab2_layout
 from plot_functions import filter_files, make_plot, write_text, get_line_parameters
 from axes_functions import get_axes, set_axes, set_axes_from_plot
-from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1,able_mode_2
+from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1, \
+    able_mode_2
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
 
 # Building Window
-layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, key='_tab1_'), sg.Tab('Legend', tab2_layout, key='_tab2_')]])],
+layout = [[sg.Menu([['File', ['Choose folder', 'Open pickle file']]])],
+          [sg.TabGroup([[sg.Tab('Graph', tab1_layout, key='_tab1_'), sg.Tab('Legend', tab2_layout, key='_tab2_')]])],
           [sg.T("File Name:"), sg.Input(key="-Save-", size=(30, 4), change_submits=True), sg.Button("Save")]]
 
 window = sg.Window('My Graph Maker', layout, resizable=True, finalize=True)
@@ -36,16 +38,9 @@ while True:
     if event == sg.WIN_CLOSED:  # or event=="Exit": # if user closes window
         break
 
-    elif event == "Submit":
-
-        path_dir_folder: str = values["-IN2-"]
-        if not path_dir_folder:  # is empty
-            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
-        else:
-            [TRA, y_label] = filter_files(values, window)
-
-    elif event == "Submit_file":
-        path_dir_file: str = values["-open_file2-"]
+    elif event == "Open pickle file":
+        path_dir_file = sg.PopupGetFile('folder name to open', no_window=True,
+                                        file_types=(("pickle files", "*.pickle"),))
         if not path_dir_file:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the file!", u"Error", 0)
         else:
@@ -58,6 +53,18 @@ while True:
             update_legend_editor(window, legend_parameters, lines_plots)
             set_axes_from_plot(ax, window)
             plt.show()
+
+    elif event == "Choose folder":
+        path_dir_folder = sg.PopupGetFolder('folder name to open', no_window=True)
+        window["-IN2-"].update(path_dir_folder)
+
+    elif event == "Submit":
+
+        path_dir_folder = values["-IN2-"]
+        if not path_dir_folder:  # is empty
+            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
+        else:
+            [TRA, y_label] = filter_files(values, window)
 
     elif event == "MakeGraph":
         if values["-list-"]:  # chose csv files
@@ -81,7 +88,7 @@ while True:
 
     elif event == "Position 2" + "CHANGE":
         able_mode_2(window)
-        
+
     elif plt.fignum_exists(1):
 
         if event == "Set Axis":
