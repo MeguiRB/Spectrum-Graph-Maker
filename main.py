@@ -25,7 +25,7 @@ matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
 layout = [[sg.TabGroup([[sg.Tab('Graph', tab1_layout, key='_tab1_'), sg.Tab('Legend', tab2_layout, key='_tab2_')]])],
           [sg.T("File Name:"), sg.Input(key="-Save-", size=(30, 4), change_submits=True), sg.Button("Save")]]
 
-window = sg.Window('My Graph Maker', layout, size=(680, 450), resizable=True, finalize=True)
+window = sg.Window('My Graph Maker', layout, resizable=True, finalize=True)
 
 window['Position 1'].bind('<ButtonRelease-1>', 'CHANGE')
 window['Position 2'].bind('<ButtonRelease-1>', 'CHANGE')
