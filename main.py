@@ -38,12 +38,22 @@ while True:
 
     elif event == "Submit":
 
-        path_dir: str = values["-IN2-"]
-        if not path_dir:  # is empty
+        path_dir_folder: str = values["-IN2-"]
+        if not path_dir_folder:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
         else:
             [TRA, y_label] = filter_files(values, window)
-            print(values["-IN-"])
+
+    elif event == "Submit_file":
+        path_dir_file: str = values["-open_file2-"]
+        if not path_dir_file:  # is empty
+            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the file!", u"Error", 0)
+        else:
+            info_file = open(path_dir_file, "rb")
+            [fig_handle, ax, lines_plots, legend_parameters, visible_light] = pkl.load(info_file)
+            show_legend_editor(window, lines_plots)
+            set_axes_from_plot(ax, window)
+            plt.show()
 
     elif event == "MakeGraph":
         if values["-list-"]:  # chose csv files
@@ -53,7 +63,7 @@ while True:
             else:
                 ax.cla()
 
-            [lines_plots, visible_light] = make_plot(path_dir, TRA, y_label, values, ax)
+            [lines_plots, visible_light] = make_plot(path_dir_folder, TRA, y_label, values, ax)
             show_legend_editor(window, lines_plots)
             legend_parameters = get_legend_parameters(values)
             show_legend(ax, legend_parameters)
@@ -113,8 +123,8 @@ while True:
             plt.show()
 
         elif event == "Save":
-            dir_name_images = os.sep.join([path_dir, "Images"])
-            dir_name_pickle = os.sep.join([path_dir, "Pickles"])
+            dir_name_images = os.sep.join([path_dir_folder, "Images"])
+            dir_name_pickle = os.sep.join([path_dir_folder, "Pickles"])
 
             if not os.path.exists(dir_name_images):
                 os.mkdir(dir_name_images)
