@@ -14,7 +14,8 @@ tab2_layout = [[sg.Text('Legend Editor', font=("Arial", 20))],
                 sg.pin(sg.Text("     Linestyle", key="LS", visible=False)),
                 sg.pin(sg.Text("          Linecolor", key="LC", visible=False))]]
 
-for z in range(1, 11):
+length = len(color_dictionary) + 1
+for z in range(1, length):
     tab2_layout.append([sg.pin(sg.Text(f"Legend {z:02}:  ", key=f"L{z}", visible=False)),
                         sg.pin(sg.Input(key=f"{z}", size=(32, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_a{z}", visible=False)),

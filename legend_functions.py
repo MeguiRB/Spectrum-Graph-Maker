@@ -35,9 +35,9 @@ def update_legend_editor(window, legend_parameters, lines_plots):
     window["-frame-"].update(frame[legend_parameters[4]])
 
 
-
 def show_legend_editor(window, lines_plots):
-    for leg in range(1, 11):
+    length = len(color_dictionary) + 1
+    for leg in range(1, length):
         if leg < len(lines_plots) + 1:
             vis = True
         else:
