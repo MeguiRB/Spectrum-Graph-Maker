@@ -8,7 +8,7 @@ color_list = list(color_dictionary.keys())
 style_types = ['solid', 'dashed', 'dashdot', 'dotted']
 
 size_color_box = (9, 7)
-tab2_layout = [[sg.Text('Legend Editor', font=(25))],
+tab2_layout = [[sg.Text('Legend Editor', font=("Arial", 20))],
                [sg.pin(sg.Text('                                             Text', key="LegT", visible=False)),
                 sg.pin(sg.Text("                             Linewidth", key="LW", visible=False)),
                 sg.pin(sg.Text("     Linestyle", key="LS", visible=False)),

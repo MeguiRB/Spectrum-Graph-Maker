@@ -24,7 +24,7 @@ column_b = [[sg.T("")],
             [sg.Column(column_b1), sg.Column(column_b2), sg.Column(column_b3)],
             ]
 
-tab1_layout = [[sg.Text('Graph Maker', font=(25))],
+tab1_layout = [[sg.Text('Graph Maker', font=("Arial", 20))],
                [sg.Text("Choose a folder: "), sg.Input(key="-IN2-", size=(65, 4), change_submits=True),
                 sg.FolderBrowse(key="-IN-")],
                [sg.Text("Chose a parameter: "), sg.Radio('Transmittance', "RADIO1", default=True, key="-Trans-"),
