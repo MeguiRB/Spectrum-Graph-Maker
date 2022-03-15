@@ -16,7 +16,7 @@ from gui_tab_1 import tab1_layout
 from gui_tab_2 import tab2_layout
 from plot_functions import filter_files, make_plot, write_text, get_line_parameters
 from axes_functions import get_axes, set_axes, set_axes_from_plot
-from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor
+from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1,able_mode_2
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -76,6 +76,12 @@ while True:
         else:
             ctypes.windll.user32.MessageBoxW(0, u"You haven't chosen any files!", u"Error", 0)
 
+    elif event == "Position 1" + "CHANGE":
+        able_mode_1(window)
+
+    elif event == "Position 2" + "CHANGE":
+        able_mode_2(window)
+        
     elif plt.fignum_exists(1):
 
         if event == "Set Axis":
@@ -104,16 +110,6 @@ while True:
             # call legend to show update
             show_legend(ax, legend_parameters)
             plt.show()
-
-        elif event == "Position 1" + "CHANGE":
-            window["-leg-"].update(disabled=False)
-            window['_SPINX_'].update(disabled=True)
-            window['_SPINY_'].update(disabled=True)
-
-        elif event == "Position 2" + "CHANGE":
-            window["-leg-"].update(disabled=True)
-            window['_SPINX_'].update(disabled=False)
-            window['_SPINY_'].update(disabled=False)
 
         elif event == "Update":
             legend_parameters = get_legend_parameters(values)

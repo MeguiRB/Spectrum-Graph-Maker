@@ -1,6 +1,18 @@
 from colors import color_dictionary
 
 
+def able_mode_1(window):
+    window["-leg-"].update(disabled=False)
+    window['_SPINX_'].update(disabled=True)
+    window['_SPINY_'].update(disabled=True)
+
+
+def able_mode_2(window):
+    window["-leg-"].update(disabled=True)
+    window['_SPINX_'].update(disabled=False)
+    window['_SPINY_'].update(disabled=False)
+
+
 def update_legend_editor(window, legend_parameters, lines_plots):
     style_types = {'-': 'solid', '--': 'dashed', '-.': 'dashdot', ':': 'dotted'}
 
@@ -18,16 +30,12 @@ def update_legend_editor(window, legend_parameters, lines_plots):
     if not legend_parameters[1]:
         window['-leg-'].update(legend_parameters[0])
         window["Position 1"].update(True)
-        window["-leg-"].update(disabled=False)
-        window['_SPINX_'].update(disabled=True)
-        window['_SPINY_'].update(disabled=True)
+        able_mode_1(window)
     else:
         window['_SPINX_'].update(legend_parameters[1][0])
         window['_SPINY_'].update(legend_parameters[1][1])
         window["Position 2"].update(True)
-        window["-leg-"].update(disabled=True)
-        window['_SPINX_'].update(disabled=False)
-        window['_SPINY_'].update(disabled=False)
+        able_mode_2(window)
 
     window['-columns-'].update(legend_parameters[2])
     window["-Tsize-"].update(legend_parameters[3])
