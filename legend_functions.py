@@ -1,22 +1,39 @@
 from colors import color_dictionary
 
 
-def update_legend_editor(window, lines_plots):
+def update_legend_editor(window, legend_parameters, lines_plots):
     style_types = {'-': 'solid', '--': 'dashed', '-.': 'dashdot', ':': 'dotted'}
 
-    for index, line in enumerate(lines_plots,start=1):
+    for index, line in enumerate(lines_plots, start=1):
         line_style = style_types[line.get_linestyle()]
         window["S" + str(index)].update(line_style)
 
         window["W" + str(index)].update(line.get_linewidth())
-        print(line.get_linewidth())
 
         value_color = line.get_color()
-        print(value_color)
         key_color = [key for key, value in color_dictionary.items() if value == value_color][0]
         window["C" + str(index)].update(key_color)
 
     show_legend_editor(window, lines_plots)
+    if not legend_parameters[1]:
+        window['-leg-'].update(legend_parameters[0])
+        window["Position 1"].update(True)
+        window["-leg-"].update(disabled=False)
+        window['_SPINX_'].update(disabled=True)
+        window['_SPINY_'].update(disabled=True)
+    else:
+        window['_SPINX_'].update(legend_parameters[1][0])
+        window['_SPINY_'].update(legend_parameters[1][1])
+        window["Position 2"].update(True)
+        window["-leg-"].update(disabled=True)
+        window['_SPINX_'].update(disabled=False)
+        window['_SPINY_'].update(disabled=False)
+
+    window['-columns-'].update(legend_parameters[2])
+    window["-Tsize-"].update(legend_parameters[3])
+    frame = {True: "yes", False: "no"}
+    window["-frame-"].update(frame[legend_parameters[4]])
+
 
 
 def show_legend_editor(window, lines_plots):

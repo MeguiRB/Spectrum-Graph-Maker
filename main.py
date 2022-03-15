@@ -55,7 +55,7 @@ while True:
                 plt.close()
             info_file = open(path_dir_file, "rb")
             [fig_handle, ax, lines_plots, legend_parameters, visible_light] = pkl.load(info_file)
-            update_legend_editor(window, lines_plots)
+            update_legend_editor(window, legend_parameters, lines_plots)
             set_axes_from_plot(ax, window)
             plt.show()
 
@@ -127,23 +127,20 @@ while True:
             plt.show()
 
         elif event == "Save":
-
-            dir_name_images = os.sep.join([path_dir_folder, "Images"])
-            dir_name_pickle = os.sep.join([path_dir_folder, "Pickles"])
-
-            if not os.path.exists(dir_name_images):
-                os.mkdir(dir_name_images)
-
-            if not os.path.exists(dir_name_pickle):
-                os.mkdir(dir_name_pickle)
+            if "png-pickle folder" in path_dir_folder:
+                dir_name_folder = path_dir_folder
+            else:
+                dir_name_folder = os.sep.join([path_dir_folder, "png-pickle folder"])
+                if not os.path.exists(dir_name_folder):
+                    os.mkdir(dir_name_folder)
 
             file_name = values["-Save-"]
 
             # save as png
-            image_file_name = dir_name_images + '/' + file_name + '.png'
-            fig_handle.savefig(image_file_name, dpi=300, bbox_inches='tight')
+            image_file = dir_name_folder + '/' + file_name + '.png'
+            fig_handle.savefig(image_file, dpi=300, bbox_inches='tight')
 
             # save as pickle
-            pickle_file_name = dir_name_pickle + '/' + file_name + '.pickle'
+            pickle_file = dir_name_folder + '/' + file_name + '.pickle'
             pkl.dump((fig_handle, ax, lines_plots, legend_parameters, visible_light),
-                     open(pickle_file_name, 'wb', pkl.HIGHEST_PROTOCOL))
+                     open(pickle_file, 'wb', pkl.HIGHEST_PROTOCOL))
