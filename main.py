@@ -16,7 +16,7 @@ from gui_tab_1 import tab1_layout
 from gui_tab_2 import tab2_layout
 from plot_functions import filter_files, make_plot, write_text, get_line_parameters
 from axes_functions import get_axes, set_axes, set_axes_from_plot
-from legend_functions import show_legend_editor, show_legend, get_legend_parameters
+from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor
 
 matplotlib.use('TkAgg')  # plot window
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -49,11 +49,13 @@ while True:
         if not path_dir_file:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the file!", u"Error", 0)
         else:
+            index = path_dir_file.rfind('/')
+            path_dir_folder = path_dir_file[:index]
             if plt.fignum_exists(1):
                 plt.close()
             info_file = open(path_dir_file, "rb")
             [fig_handle, ax, lines_plots, legend_parameters, visible_light] = pkl.load(info_file)
-            show_legend_editor(window, lines_plots)
+            update_legend_editor(window, lines_plots)
             set_axes_from_plot(ax, window)
             plt.show()
 
@@ -125,6 +127,7 @@ while True:
             plt.show()
 
         elif event == "Save":
+
             dir_name_images = os.sep.join([path_dir_folder, "Images"])
             dir_name_pickle = os.sep.join([path_dir_folder, "Pickles"])
 
