@@ -49,6 +49,8 @@ while True:
         if not path_dir_file:  # is empty
             ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the file!", u"Error", 0)
         else:
+            if plt.fignum_exists(1):
+                plt.close()
             info_file = open(path_dir_file, "rb")
             [fig_handle, ax, lines_plots, legend_parameters, visible_light] = pkl.load(info_file)
             show_legend_editor(window, lines_plots)
