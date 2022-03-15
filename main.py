@@ -9,7 +9,6 @@ import PySimpleGUI as sg  # create GUI
 import matplotlib  # make plot
 import matplotlib.pyplot as plt
 import os
-import ctypes  # for error message
 import pickle as pkl  # to edit the plots if needed
 from colors import color_dictionary
 from gui_tab_1 import tab1_layout
@@ -42,7 +41,7 @@ while True:
         path_dir_file = sg.PopupGetFile('folder name to open', no_window=True,
                                         file_types=(("pickle files", "*.pickle"),))
         if not path_dir_file:  # is empty
-            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the file!", u"Error", 0)
+            sg.popup("You forgot to choose the file!")
         else:
             index = path_dir_file.rfind('/')
             path_dir_folder = path_dir_file[:index]
@@ -62,7 +61,7 @@ while True:
 
         path_dir_folder = values["-IN2-"]
         if not path_dir_folder:  # is empty
-            ctypes.windll.user32.MessageBoxW(0, u"You forgot to choose the folder!", u"Error", 0)
+            sg.popup("You forgot to choose the folder!")
         else:
             [TRA, y_label] = filter_files(values, window)
 
@@ -81,7 +80,7 @@ while True:
             set_axes_from_plot(ax, window)
             plt.show()
         else:
-            ctypes.windll.user32.MessageBoxW(0, u"You haven't chosen any files!", u"Error", 0)
+            sg.popup("You haven't chosen any files!")
 
     elif event == "Position 1" + "CHANGE":
         able_mode_1(window)
