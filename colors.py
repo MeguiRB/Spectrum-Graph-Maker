@@ -13,5 +13,4 @@ color_dictionary = {"light blue": "tab:blue",
                     "red": "r",
                     "magenta": "m",
                     "black": "k",
-                    "white": "w"
                     }
