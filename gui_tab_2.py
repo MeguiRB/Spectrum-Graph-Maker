@@ -18,7 +18,7 @@ for z in range(1, 11):
     tab2_layout.append([sg.pin(sg.Text(f"Legend {z:02}:  ", key=f"L{z}", visible=False)),
                         sg.pin(sg.Input(key=f"{z}", size=(32, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_a{z}", visible=False)),
-                        sg.pin(sg.Input("0.9", key=f"W{z}", size=(4, 4), visible=False)),
+                        sg.pin(sg.Input("1", key=f"W{z}", size=(4, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_b{z}", visible=False)),
                         sg.pin(sg.Combo(style_types, default_value="solid", key=f"S{z}", size=(7, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_d{z}", visible=False)),
