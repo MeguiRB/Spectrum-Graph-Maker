@@ -34,7 +34,7 @@ tab1_layout = [[sg.Text('Graph Maker', font=(25))],
                 sg.T("  "), sg.Button("Submit")],
                [sg.HorizontalSeparator(key="Separate0")],
                [sg.Text("Open file: "), sg.Input(key="-open_file-", size=(62, 4), change_submits=True),
-                sg.FileBrowse(key="-open_file2-"), sg.Button("Submit", key="Submit_file")],
+                sg.FileBrowse(key="-open_file2-", file_types=(("pickle files", "*.pickle"),)), sg.Button("Submit", key="Submit_file")],
                [sg.HorizontalSeparator(key="Separate")],
                [sg.Column(column_a), sg.Column(column_b)],
                [sg.T("")]
