@@ -5,6 +5,12 @@ from typing import List
 import natsort  # sort list
 from colors import color_dictionary
 import os
+#Included function header comments
+
+file_extension = ".csv"
+trans = "TT"
+reflect = "R"
+absorb = "Abs"
 
 
 def import_data(dir_path, file):
@@ -32,11 +38,11 @@ def get_chosen_parameter(values):
     optical_property, y_label = '', ''
 
     if values["-Trans-"]:
-        optical_property = "TT"
+        optical_property = trans
         y_label = "Transmittance (%)"
 
     elif values["-Refl-"]:
-        optical_property = "R"
+        optical_property = reflect
         y_label = "Reflectance (%)"
 
     elif values["-Absorp-"]:
@@ -44,7 +50,7 @@ def get_chosen_parameter(values):
 
     elif values["-Absorb-"]:
         y_label = "Absorbance"
-        optical_property = "Abs"
+        optical_property = absorb
 
     return [optical_property, y_label]
 
@@ -65,11 +71,11 @@ def filter_files(values, window):
     name_files = []
     for fileName in content_dir:
 
-        if fileName.find("csv") != -1 and fileName.find(optical_property) != -1:
-            name_files.append(fileName.replace('.csv', ''))
+        if fileName.find(file_extension) != -1 and fileName.find(optical_property) != -1:
+            name_files.append(fileName.replace(file_extension, ''))
 
-        elif values["-Absorp-"] and (fileName.find("R") != -1 or fileName.find("TT") != -1):
-            name_files.append(fileName.replace('.csv', ''))
+        elif values["-Absorp-"] and (fileName.find(reflect) != -1 or fileName.find(trans) != -1):
+            name_files.append(fileName.replace(file_extension, ''))
 
     window["-list-"].Update(name_files)
     return [optical_property, y_label]
@@ -81,28 +87,28 @@ def pair_rt_files(file_name, files_selected):
     E.g., S001 TT.csv and S001 R.csv"""
 
     file_name_import = file_name
-    find_t = file_name.find("TT")
-    find_r = file_name.find("R")
+    find_t = file_name.find(trans)
+    find_r = file_name.find(reflect)
 
     search = ''
     if find_t >= 0:
-        file_name = file_name.replace('TT', '')
-        search = "R"
+        file_name = file_name.replace(trans, '')
+        search = reflect
     elif find_r >= 0:
-        file_name = file_name.replace('R', '')
-        search = "TT"
-    file_name = file_name.replace('.csv', '')
+        file_name = file_name.replace(reflect, '')
+        search = trans
+    file_name = file_name.replace(file_extension, '')
     file_name_check = [i for i in files_selected if file_name and search in i]
 
     index = -1
     for possible_file in file_name_check:
         index += 1
-        possible_file = possible_file.replace('.csv', '')
+        possible_file = possible_file.replace(file_extension, '')
 
-        if search == "R":
-            possible_file = possible_file.replace('R', '')
-        if search == "TT":
-            possible_file = possible_file.replace('TT', '')
+        if search == reflect:
+            possible_file = possible_file.replace(reflect, '')
+        if search == trans:
+            possible_file = possible_file.replace(trans, '')
         if file_name == possible_file:
             file_name_import_2 = file_name_check[index]
             files_selected.remove(file_name_import_2)
@@ -118,7 +124,7 @@ def get_line_parameters(num_key, values):
     return [color_chosen, line_style, width]
 
 
-def make_plot(path_dir, TRA, y_label, values, ax):
+def make_plot(path_dir, optical_property, y_label, values, ax):
     """Plots the graph. Returns an array that contains the plotted lines objects
     and the vertical span corresponding to the visible light"""
 
@@ -126,7 +132,7 @@ def make_plot(path_dir, TRA, y_label, values, ax):
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
     files_selected_beta = values["-list-"]
-    files_selected = [file + ".csv" for file in files_selected_beta]
+    files_selected = [file + file_extension for file in files_selected_beta]
 
     lines_plots = []
     n_lines = 0
@@ -134,12 +140,12 @@ def make_plot(path_dir, TRA, y_label, values, ax):
 
         if not values["-Absorp-"]:
             [values_x, values_y] = import_data(path_dir, file_name)
-            legend_name = legend_name.replace(" " + TRA, '')
+            legend_name = legend_name.replace(" " + optical_property, '')
             legend_name = write_text(legend_name)
 
             lines_plots.append("")
 
-            [color_chosen, line_style, width] = get_line_parameters(str(n_lines+1), values)
+            [color_chosen, line_style, width] = get_line_parameters(str(n_lines + 1), values)
             if not width.isdigit():
                 width = 0.9
             lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
@@ -158,12 +164,12 @@ def make_plot(path_dir, TRA, y_label, values, ax):
                 abs_column_label = abs_dataframe.columns[0]
                 values_y = abs_dataframe[abs_column_label]
 
-                legend_name = legend_name.replace(" TT", '')
-                legend_name = legend_name.replace(" R", '')
+                legend_name = legend_name.replace(" "+trans, '')
+                legend_name = legend_name.replace(" "+reflect, '')
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
-                [color_chosen, line_style, width] = get_line_parameters(str(n_lines+1), values)
+                [color_chosen, line_style, width] = get_line_parameters(str(n_lines + 1), values)
                 if not width.isdigit():
                     width = 0.9
                 lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
