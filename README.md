@@ -20,7 +20,7 @@ The second tab is to edit the plot lines (color, width, style) and the legend (t
 
 There is also an option to save the data. Just input the file name (extension not needed) and the graph is saved in png and pickle formats.
 
-<img src = "/images/GUI_tab1.png" width ="400" /> <img src = "/images/GUI_tab2.png" width ="400" />
+<img src = "/images/GUI_tab1.png" width ="370" /> <img src = "/images/GUI_tab2.png" width ="370" />
 
 ### Open a pickle file
 The pickle files allow to edit the plot later on. In the menu, there is the option 'Open pickle file'. 
