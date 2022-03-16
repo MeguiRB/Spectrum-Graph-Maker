@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-tab2_layout
 """
 Created on Tue Sep 14 19:36:38 2021
-
 @author: Margarida Barbosa
 """
 
@@ -14,11 +13,11 @@ from colors import color_dictionary
 from gui_tab_1 import tab1_layout
 from gui_tab_2 import tab2_layout
 from plot_functions import filter_files, make_plot, write_text, get_line_parameters
-from axes_functions import get_axes, set_axes, set_axes_from_plot
+from axes_functions import set_axes, set_axes_from_plot
 from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1, \
     able_mode_2
 
-matplotlib.use('TkAgg')  # plot window
+matplotlib.use('TkAgg')  # plot window: Using Matplotlib with tkinter
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
 
 # Building Window
@@ -91,8 +90,7 @@ while True:
     elif plt.fignum_exists(1):
 
         if event == "Set Axis":
-            axes = get_axes(values)
-            set_axes(axes, ax)
+            set_axes(values, ax)
             plt.show()
 
         elif event == "-ChLeg-":  # Change legend

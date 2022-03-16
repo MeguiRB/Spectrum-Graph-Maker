@@ -1,4 +1,5 @@
 def check_num(string):
+    """Checks if string is a number (positive or negative)"""
     string = string.strip()
     if string.isdigit() or (string.startswith("-") and string[1:].isdigit()):
         return True
@@ -7,6 +8,7 @@ def check_num(string):
 
 
 def get_axes(values):
+    """Returns the axis range (min and max x, y) from GUI"""
     keys = ['-xmin-', '-xmax-', '-ymin-', '-ymax-']
     axes = []
     for key in keys:
@@ -17,8 +19,9 @@ def get_axes(values):
     return axes
 
 
-def set_axes(axes, ax):
-
+def set_axes(values, ax):
+    """Sets the plot axis range"""
+    axes = get_axes(values)
     if axes[0] != '':
         ax.set_xlim(left=axes[0])
 
@@ -33,6 +36,7 @@ def set_axes(axes, ax):
 
 
 def set_axes_from_plot(ax, window):
+    """Sets the plot axis range in the GUI text boxes"""
     x_min, x_max = ax.get_xlim()
     y_min, y_max = ax.get_ylim()
 
