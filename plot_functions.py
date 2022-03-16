@@ -5,7 +5,6 @@ from typing import List
 import natsort  # sort list
 from colors import color_dictionary
 import os
-#Included function header comments
 
 file_extension = ".csv"
 trans = "TT"

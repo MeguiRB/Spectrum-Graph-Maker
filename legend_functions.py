@@ -2,18 +2,23 @@ from colors import color_dictionary
 
 
 def able_mode_1(window):
+    """Able the components that allow to position the legend using descreptive strings
+    Disabled the components that allow to position the legend the  using coordinates"""
     window["-leg-"].update(disabled=False)
     window['_SPINX_'].update(disabled=True)
     window['_SPINY_'].update(disabled=True)
 
 
 def able_mode_2(window):
+    """Disabled the components that allow to position the legend the  using coordinates
+    Able the components that allow to position the legend using descreptive strings"""
     window["-leg-"].update(disabled=True)
     window['_SPINX_'].update(disabled=False)
     window['_SPINY_'].update(disabled=False)
 
 
 def update_legend_editor(window, legend_parameters, lines_plots):
+    """Update the legend parameters in the GUI according to the current plot"""
     style_types = {'-': 'solid', '--': 'dashed', '-.': 'dashdot', ':': 'dotted'}
 
     for index, line in enumerate(lines_plots, start=1):
@@ -44,6 +49,7 @@ def update_legend_editor(window, legend_parameters, lines_plots):
 
 
 def show_legend_editor(window, lines_plots):
+    """Shows in tab2 only part of the legend editor according to number of plot lines"""
     length = len(color_dictionary) + 1
     for leg in range(1, length):
         if leg < len(lines_plots) + 1:
@@ -61,6 +67,7 @@ def show_legend_editor(window, lines_plots):
 
 
 def place_legend(values):
+    """Get the position to place the legend of the plot"""
     if values["Position 1"]:
         legend_position = values["-leg-"]
         box = None
@@ -74,6 +81,7 @@ def place_legend(values):
 
 
 def framing(values):
+    """Returns True if we want to frame the legend, if not returns False """
     if values["-frame-"] == "yes":
         legend_frame = True
     else:
@@ -82,6 +90,7 @@ def framing(values):
 
 
 def get_legend_parameters(values):
+    """Get the legend parameters such as legend_position, box, number_columns, size_legend_letter, put_frame from GUI"""
     put_frame = framing(values)
     size_legend_letter = values["-Tsize-"]
     [legend_position, box] = place_legend(values)
@@ -91,6 +100,7 @@ def get_legend_parameters(values):
 
 
 def show_legend(ax, parameters):
+    """Places a customized legend (according to the parameters) on the graph"""
     legend_variable = ax.legend(loc=parameters[0], bbox_to_anchor=parameters[1], ncol=parameters[2],
                                 prop={'size': parameters[3]}, frameon=parameters[4],
                                 framealpha=1, borderpad=0.5)
