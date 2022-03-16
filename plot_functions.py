@@ -8,6 +8,8 @@ import os
 
 
 def import_data(dir_path, file):
+    """Input: the directory path and the csv file
+    Output: the x, y values"""
     path_file = os.sep.join([dir_path, file])
     df = pd.read_csv(path_file)
 
@@ -25,6 +27,8 @@ def import_data(dir_path, file):
 
 
 def get_chosen_parameter(values):
+    """Returns the y parameter pretended - y_label (Transmittance, Reflectance, Absorption or Absorbance)
+    and the name to describe it - optical_property (TT, R, Abs)"""
     optical_property, y_label = '', ''
 
     if values["-Trans-"]:
@@ -46,9 +50,15 @@ def get_chosen_parameter(values):
 
 
 def filter_files(values, window):
+    """Puts the name of the files in Listbox according to the parameter chosen
+    (Transmittance-TT, Reflectance-R, Absorption-TT,R or Absorbance-Abs)
+    The property is identified in the name of the file, e.g., #### TT.csv
+    Returns the y parameter pretended - y_label (Transmittance, Reflectance, Absorption or Absorbance)
+    and the name to describe it - optical_property (TT, R, Abs)"""
+
     [optical_property, y_label] = get_chosen_parameter(values)
 
-    dir_path: str = values["-IN2-"]
+    dir_path = values["-IN2-"]
     content_dir: List[str] = os.listdir(dir_path)
     content_dir = natsort.natsorted(content_dir)  # what happened: 1,10,2,3,4. Now considers 2 before 10
 
@@ -66,7 +76,9 @@ def filter_files(values, window):
 
 
 def pair_rt_files(file_name, files_selected):
-    """pair reflectance and transmittance files"""
+    """Pairs the reflectance and transmittance files.
+    The name of these without the optical_property (TT, R) should be the same
+    E.g., S001 TT.csv and S001 R.csv"""
 
     file_name_import = file_name
     find_t = file_name.find("TT")
@@ -98,6 +110,7 @@ def pair_rt_files(file_name, files_selected):
 
 
 def get_line_parameters(num_key, values):
+    """Returns the color,line style and width specified in the GUI"""
     color_chosen = values["C" + num_key]
     line_style = values["S" + num_key]
     width = values["W" + num_key]
@@ -106,6 +119,9 @@ def get_line_parameters(num_key, values):
 
 
 def make_plot(path_dir, TRA, y_label, values, ax):
+    """Plots the graph. Returns an array that contains the plotted lines objects
+    and the vertical span corresponding to the visible light"""
+
     for wv_range, rgb in rainbow_rgb.items():
         visible_light = ax.axvspan(*wv_range, color=rgb, ec='none', alpha=0.1)
 
@@ -167,6 +183,7 @@ def make_plot(path_dir, TRA, y_label, values, ax):
 
 
 def write_text(string):
+    """Formats text. If in the str ' n_line ' is in the string, it starts a new line"""
     if 'n_line' in string:
         text = string.split(" n_line ")
         text1 = text[0]
