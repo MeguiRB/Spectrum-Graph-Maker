@@ -1,5 +1,8 @@
 from colors import color_dictionary
 
+default_col_num = 1
+default_font_size = 13
+
 
 def able_mode_1(window):
     """Able the components that allow to position the legend using descreptive strings
@@ -89,13 +92,27 @@ def framing(values):
     return legend_frame
 
 
+def check_leg_num(string, num_type):
+    if num_type == "int" and string.isdigit():
+        num = int(string)
+        if num == 0:
+            num = default_col_num
+        return num
+    elif num_type == "float":
+        try:
+            return float(string)
+        except ValueError:
+            return default_font_size
+    else:
+        return default_col_num
+
+
 def get_legend_parameters(values):
     """Get the legend parameters such as legend_position, box, number_columns, size_legend_letter, put_frame from GUI"""
     put_frame = framing(values)
-    size_legend_letter = values["-Tsize-"]
+    size_legend_letter = check_leg_num(values["-Tsize-"], "float")
     [legend_position, box] = place_legend(values)
-    number_columns = int(values['-columns-'])
-
+    number_columns = check_leg_num(values['-columns-'], "int")
     return [legend_position, box, number_columns, size_legend_letter, put_frame]
 
 

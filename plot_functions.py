@@ -10,6 +10,7 @@ file_extension = ".csv"
 trans = "TT"
 reflect = "R"
 absorb = "Abs"
+default_width = 1
 
 
 def import_data(dir_path, file):
@@ -119,6 +120,10 @@ def get_line_parameters(num_key, values):
     color_chosen = values["C" + num_key]
     line_style = values["S" + num_key]
     width = values["W" + num_key]
+    try:
+        width = float(width)
+    except ValueError:
+        width = default_width
 
     return [color_chosen, line_style, width]
 
@@ -145,8 +150,6 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
             lines_plots.append("")
 
             [color_chosen, line_style, width] = get_line_parameters(str(n_lines + 1), values)
-            if not width.isdigit():
-                width = 0.9
             lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
                                             linewidth=width, color=color_dictionary[color_chosen])
             n_lines += 1
@@ -170,7 +173,7 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
                 lines_plots.append("")
                 [color_chosen, line_style, width] = get_line_parameters(str(n_lines + 1), values)
                 if not width.isdigit():
-                    width = 0.9
+                    width = 1
                 lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
                                                 linewidth=width, color=color_dictionary[color_chosen])
 
