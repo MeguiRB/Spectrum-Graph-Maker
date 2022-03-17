@@ -172,8 +172,6 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
 
                 lines_plots.append("")
                 [color_chosen, line_style, width] = get_line_parameters(str(n_lines + 1), values)
-                if not width.isdigit():
-                    width = 1
                 lines_plots[n_lines], = ax.plot(values_x, values_y, label=legend_name, linestyle=line_style,
                                                 linewidth=width, color=color_dictionary[color_chosen])
 
