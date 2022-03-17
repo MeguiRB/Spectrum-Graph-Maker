@@ -5,12 +5,8 @@ from typing import List
 import natsort  # sort list
 from colors import color_dictionary
 import os
+from defaults_values import default_axes_font_size, default_width, file_extension, trans, reflect, absorb
 
-file_extension = ".csv"
-trans = "TT"
-reflect = "R"
-absorb = "Abs"
-default_width = 1
 
 
 def import_data(dir_path, file):
@@ -177,13 +173,11 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
 
                 n_lines += 1
 
-    font_size = 17
-
-    ax.set_xlabel('Wavelength (nm)', fontsize=font_size)
-    ax.set_ylabel(y_label, fontsize=font_size)
+    ax.set_xlabel('Wavelength (nm)', fontsize=default_axes_font_size)
+    ax.set_ylabel(y_label, fontsize=default_axes_font_size)
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-    ax.tick_params(labelsize=font_size, top=False, right=False, which='both')  # both major and minor ticks are affected
+    ax.tick_params(labelsize=default_axes_font_size, top=False, right=False, which='both')  # both major and minor ticks are affected
 
     return [lines_plots, visible_light]  # text labels
 

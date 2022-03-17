@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from colors import color_dictionary
-
+from defaults_values import default_leg_font_size, default_col_num, default_width
 sg.theme("DarkTeal2")
 box_size = (4, 4)
 
@@ -19,7 +19,7 @@ for z in range(1, length):
     tab2_layout.append([sg.pin(sg.Text(f"Legend {z:02}:  ", key=f"L{z}", visible=False)),
                         sg.pin(sg.Input(key=f"{z}", size=(32, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_a{z}", visible=False)),
-                        sg.pin(sg.Input("1", key=f"W{z}", size=(4, 4), visible=False)),
+                        sg.pin(sg.Input(f"{default_width}", key=f"W{z}", size=(4, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_b{z}", visible=False)),
                         sg.pin(sg.Combo(style_types, default_value="solid", key=f"S{z}", size=(7, 4), visible=False)),
                         sg.pin(sg.T("   ", key=f"space_d{z}", visible=False)),
@@ -35,9 +35,9 @@ while i <= 3:
 positions_choices = ['best', 'upper left', 'upper center', 'upper right', 'center left', 'center', 'center right',
                      'lower left', 'lower center', 'lower right']
 
-column_1 = [[sg.T("Columns:"), sg.Input('1', key="-columns-", size=box_size), sg.T("    Frame:"),
+column_1 = [[sg.T("Columns:"), sg.Input(f'{default_col_num}', key="-columns-", size=box_size), sg.T("    Frame:"),
              sg.Combo(['yes', 'no'], default_value="no", key="-frame-"), sg.T("    Text size:"),
-             sg.Input('13', key="-Tsize-", size=box_size)],
+             sg.Input(f'{default_leg_font_size}', key="-Tsize-", size=box_size)],
             [sg.T("")],
             [sg.Radio("Position Mode 1", "RADIO_P", default=True, key="Position 1"),
              sg.Combo(positions_choices, default_value="best", key="-leg-", size=(18, 1))],

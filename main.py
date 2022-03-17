@@ -16,6 +16,7 @@ from plot_functions import filter_files, make_plot, write_text, get_line_paramet
 from axes_functions import set_axes, set_axes_from_plot
 from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1, \
     able_mode_2
+from defaults_values import plot_size
 
 matplotlib.use('TkAgg')  # plot window: Using Matplotlib with tkinter
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -67,7 +68,7 @@ while True:
     elif event == "MakeGraph":
         if values["-list-"]:  # chose csv files
             if not plt.fignum_exists(1):
-                fig_handle, ax = plt.subplots(figsize=(6.1, 4.1))  # 6.1,4.1   #3.9, 4.1
+                fig_handle, ax = plt.subplots(figsize=plot_size)
                 fig_handle.patch.set_alpha(0)
             else:
                 ax.cla()

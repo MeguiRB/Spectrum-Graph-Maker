@@ -1,7 +1,5 @@
 from colors import color_dictionary
-
-default_col_num = 1
-default_font_size = 13
+from defaults_values import  default_col_num, default_leg_font_size
 
 
 def able_mode_1(window):
@@ -108,7 +106,7 @@ def check_size_num(string):
     try:
         return float(string)
     except ValueError:
-        return default_font_size
+        return default_leg_font_size
 
 
 def get_legend_parameters(values):
