@@ -92,27 +92,31 @@ def framing(values):
     return legend_frame
 
 
-def check_leg_num(string, num_type):
-    if num_type == "int" and string.isdigit():
-        num = int(string)
-        if num == 0:
-            num = default_col_num
-        return num
-    elif num_type == "float":
-        try:
-            return float(string)
-        except ValueError:
-            return default_font_size
+def check_col_num(string):
+    """Checks if string is a digit"""
+    if string.isdigit():
+        num_col = int(string)
+        if num_col == 0:
+            num_col = default_col_num
+        return num_col
     else:
         return default_col_num
+
+
+def check_size_num(string):
+    """Checks if string is a float"""
+    try:
+        return float(string)
+    except ValueError:
+        return default_font_size
 
 
 def get_legend_parameters(values):
     """Get the legend parameters such as legend_position, box, number_columns, size_legend_letter, put_frame from GUI"""
     put_frame = framing(values)
-    size_legend_letter = check_leg_num(values["-Tsize-"], "float")
+    size_legend_letter = check_size_num(values["-Tsize-"])
     [legend_position, box] = place_legend(values)
-    number_columns = check_leg_num(values['-columns-'], "int")
+    number_columns = check_col_num(values['-columns-'])
     return [legend_position, box, number_columns, size_legend_letter, put_frame]
 
 
