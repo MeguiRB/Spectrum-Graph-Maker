@@ -1,5 +1,5 @@
 from colors import color_dictionary
-from defaults_values import  default_col_num, default_leg_font_size
+from defaults_values import  default_col_num, default_leg_font_size, default_frame_color
 
 
 def able_mode_1(window):
@@ -124,4 +124,4 @@ def show_legend(ax, parameters):
                                 prop={'size': parameters[3]}, frameon=parameters[4],
                                 framealpha=1, borderpad=0.5)
     frame = legend_variable.get_frame()
-    frame.set_edgecolor('black')
+    frame.set_edgecolor(default_frame_color)
