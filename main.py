@@ -16,7 +16,7 @@ from plot_functions import filter_files, make_plot, write_text, get_line_paramet
 from axes_functions import set_axes, set_axes_from_plot
 from legend_functions import show_legend_editor, show_legend, get_legend_parameters, update_legend_editor, able_mode_1, \
     able_mode_2
-from defaults_values import plot_size
+from defaults_values import plot_size, default_axes_font_size
 
 matplotlib.use('TkAgg')  # plot window: Using Matplotlib with tkinter
 matplotlib.rcParams['mathtext.default'] = 'regular'  # text formatter
@@ -123,7 +123,7 @@ while True:
         elif event == "Set Title":
             title_chosen = values["-title-"]
             title_chosen = write_text(title_chosen)
-            ax.set_title(title_chosen, fontsize=17)
+            ax.set_title(title_chosen, fontsize=default_axes_font_size)
             plt.show()
 
         elif event == "Save":

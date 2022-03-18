@@ -8,7 +8,6 @@ import os
 from defaults_values import default_axes_font_size, default_width, file_extension, trans, reflect, absorb
 
 
-
 def import_data(dir_path, file):
     """Input: the directory path and the csv file
     Output: the x, y values"""
@@ -162,8 +161,8 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
                 abs_column_label = abs_dataframe.columns[0]
                 values_y = abs_dataframe[abs_column_label]
 
-                legend_name = legend_name.replace(" "+trans, '')
-                legend_name = legend_name.replace(" "+reflect, '')
+                legend_name = legend_name.replace(" " + trans, '')
+                legend_name = legend_name.replace(" " + reflect, '')
                 legend_name = write_text(legend_name)
 
                 lines_plots.append("")
@@ -177,7 +176,8 @@ def make_plot(path_dir, optical_property, y_label, values, ax):
     ax.set_ylabel(y_label, fontsize=default_axes_font_size)
     ax.xaxis.set_minor_locator(AutoMinorLocator(2))
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-    ax.tick_params(labelsize=default_axes_font_size, top=False, right=False, which='both')  # both major and minor ticks are affected
+    ax.tick_params(labelsize=default_axes_font_size, top=False, right=False,
+                   which='both')  # both major and minor ticks are affected
 
     return [lines_plots, visible_light]  # text labels
 
