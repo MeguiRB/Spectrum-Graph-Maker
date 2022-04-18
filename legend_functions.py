@@ -1,5 +1,5 @@
 from colors import color_dictionary
-from defaults_values import  default_col_num, default_leg_font_size, default_frame_color
+from defaults_values import default_col_num, default_leg_font_size, default_frame_color
 
 
 def able_mode_1(window):
@@ -33,20 +33,21 @@ def update_legend_editor(window, legend_parameters, lines_plots):
         window["C" + str(index)].update(key_color)
 
     show_legend_editor(window, lines_plots)
-    if not legend_parameters[1]:
-        window['-leg-'].update(legend_parameters[0])
+    if not legend_parameters["legend_position"]:
+        window['-leg-'].update(legend_parameters["legend_position"])
         window["Position 1"].update(True)
         able_mode_1(window)
     else:
-        window['_SPINX_'].update(legend_parameters[1][0])
-        window['_SPINY_'].update(legend_parameters[1][1])
+        # example: legend_parameters["box"] = (1,1)
+        window['_SPINX_'].update(legend_parameters["box"][0])
+        window['_SPINY_'].update(legend_parameters["box"][1])
         window["Position 2"].update(True)
         able_mode_2(window)
 
-    window['-columns-'].update(legend_parameters[2])
-    window["-Tsize-"].update(legend_parameters[3])
+    window['-columns-'].update(legend_parameters["number_columns"])
+    window["-Tsize-"].update(legend_parameters["size_legend_letter"])
     frame = {True: "yes", False: "no"}
-    window["-frame-"].update(frame[legend_parameters[4]])
+    window["-frame-"].update(frame[legend_parameters["put_frame"]])
 
 
 def show_legend_editor(window, lines_plots):
@@ -115,13 +116,14 @@ def get_legend_parameters(values):
     size_legend_letter = check_size_num(values["-Tsize-"])
     [legend_position, box] = place_legend(values)
     number_columns = check_col_num(values['-columns-'])
-    return [legend_position, box, number_columns, size_legend_letter, put_frame]
+    return {"legend_position": legend_position, "box": box, "number_columns": number_columns,
+            "size_legend_letter": size_legend_letter, "put_frame": put_frame}
 
 
 def show_legend(ax, parameters):
     """Places a customized legend (according to the parameters) on the graph"""
-    legend_variable = ax.legend(loc=parameters[0], bbox_to_anchor=parameters[1], ncol=parameters[2],
-                                prop={'size': parameters[3]}, frameon=parameters[4],
-                                framealpha=1, borderpad=0.5)
+    legend_variable = ax.legend(loc=parameters["legend_position"], bbox_to_anchor=parameters["box"],
+                                ncol=parameters["number_columns"],prop={'size': parameters["size_legend_letter"]},
+                                frameon=parameters["put_frame"], framealpha=1, borderpad=0.5)
     frame = legend_variable.get_frame()
     frame.set_edgecolor(default_frame_color)
