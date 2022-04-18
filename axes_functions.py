@@ -10,29 +10,30 @@ def check_num(string):
 def get_axes(values):
     """Returns the axis range (min and max x, y) from GUI"""
     keys = ['-xmin-', '-xmax-', '-ymin-', '-ymax-']
-    axes = []
+    axes = {}
     for key in keys:
         if check_num(values[key]):
-            axes.append(float(values[key]))
+            axes[key] = float(values[key])
         else:
-            axes.append('')
+            axes[key] = ''
     return axes
 
 
 def set_axes(values, ax):
     """Sets the plot axis range"""
     axes = get_axes(values)
-    if axes[0] != '':
-        ax.set_xlim(left=axes[0])
 
-    if axes[1] != '':
-        ax.set_xlim(right=axes[1])
+    if axes['-xmin-'] != '':
+        ax.set_xlim(left=axes['-xmin-'])
 
-    if axes[2] != '':
-        ax.set_ylim(bottom=axes[2])
+    if axes['-xmax-'] != '':
+        ax.set_xlim(right=axes['-xmax-'])
 
-    if axes[3] != '':
-        ax.set_ylim(top=axes[3])
+    if axes['-ymin-'] != '':
+        ax.set_ylim(bottom=axes['-ymin-'])
+
+    if axes['-ymax-'] != '':
+        ax.set_ylim(top=axes['-ymax-'])
 
 
 def set_axes_from_plot(ax, window):
