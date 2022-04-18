@@ -33,7 +33,7 @@ def update_legend_editor(window, legend_parameters, lines_plots):
         window["C" + str(index)].update(key_color)
 
     show_legend_editor(window, lines_plots)
-    if not legend_parameters["legend_position"]:
+    if legend_parameters["box"] is None:
         window['-leg-'].update(legend_parameters["legend_position"])
         window["Position 1"].update(True)
         able_mode_1(window)
